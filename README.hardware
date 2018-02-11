@@ -1,0 +1,110 @@
+		Intel Stratix 10 SOCFPGA Board Support Package
+
+
+Table of Contents
+=================
+
+1. Supported Boards
+2. Change History
+3. BSP Features
+4. BSP Notes
+
+
+1. Supported Boards
+===================
+
+This BSP supports the following boards:
+
+  + Intel Stratix 10 SOCFPGA board: CotexA53 processor, Rev Rev A1 Board.
+
+2. Change History
+=================
+
+  - 2018/03 (US106539)RCPL-10.17.41.4: Add Intel Stratix 10 SOCFPGA board support
+
+3. BSP Features
+===============
+
+3.1 Supported Features
+======================
+
+The following BSP features are validated and supported on boards where
+the corresponding h/w features exist.
+
+ o General Platform
+    + perf: H/W based PMU
+
+  o Bus
+    + I2C: Five I2C controllers, DesignWare APB I2C controller (DW_apb_i2c)
+    + SPI: Synopsys DesignWare Synchronous Serial Interface (SSI) controller (DW_apb_ssi)
+
+  o Network
+    + Ethernet: Three 10/100/1000 Ethernet media access controls (MAC) with integrated DMA
+                      The EMACs are instances of the SynopsysDesignWare Universal Ethernet MAC
+
+  o USB
+    + Two USB On-the-Go (OTG) controllers with DMA.
+    + Synopsys(†)DesignWare Cores USB 2.0 Hi-Speed On-The-Go (DWC_otg) controller
+
+  o Storage
+    + SD/MMC: DesignWare High-Speed SD/MMC controller
+    + Nor flash: n25q00
+
+  o Misc Devices
+    + UART: Two DesignWare controllers, based on an industry standard 16550
+                 Synopsys DesignWare APB Universal Asynchronous Receiver/Transmitter (DW_apb_uart) peripheral
+    + GPIO: Synopsys DesignWare APB General Purpose Programming I/O (DW_apb_gpio) peripheral
+    + QSPI: Quad-SPI flash controller based on Cadence Quad SPI controller
+    + RTC: DS1339 based on I2C
+    + DMA: On-Chip ARM Corelink DMA Controller (DMA-330)
+    + FPGA I/O
+    + EEPROM: atmel,24c32
+    + Temp: maxim,max1619
+    + ADC: ltc2497
+
+2.2 Unsupported Features
+========================
+
+The following features are not supported and validated:
+
+    x HSMC interface
+    x Two RJ45 ethernet ports from FPGA
+    x HPS bridge
+    x PCIe: PCIe controller that is a hard IP in FPGA
+    x NAND: CadenceDesign IP NAND Flash Memory Controller(There is no FPGA design supporting it)
+    x Watchdog: Stratix10 doesn't authorize watchdog register accessing.
+    x SMP: CPU Hotplug, Stratix10 doesn't SMC intruction
+
+4. BSP Notes
+============
+
+4.1 Stratix 10 SOCFPGA
+======================
+
+4.1.1 Validated Board Info
+--------------------------
+
+This BSP is only validated in the following environment. If you use this
+BSP in a different environment it maybe have some issues.
+
+Preloader
+----------
+
+	Board:	               Intel SOCFPGA Stratix 10 Board
+	BootLoader:            U-Boot SPL
+	BootLoader Version:    U-Boot SPL 2017.09 (Dec 28 2017 - 11:10:01)
+
+Bootloader
+----------
+
+	Processor:             Stratix 10
+	Board:	               Intel SOCFPGA Stratix 10 Board
+	Board Revision:        Rev A1 devkit
+	BootLoader:            U-Boot
+	BootLoader Version:    U-Boot 2017.09 (Dec 20 2017 - 23:03:15 -0800)socfpga_stratix10
+
+
+
+4.1.2 Known hardware Issues
+---------------------------
+None.

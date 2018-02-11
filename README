@@ -1,0 +1,283 @@
+	Intel Stratix 10 SOCFPGA Board Support Package
+
+
+1. About this document
+======================
+
+This document describes common and non-hardware specific information.
+Please refer to README.hardware for hardware specific information.
+
+Dependencies
+------------
+This layer depends on the oe-core version supplied with Wind River
+Linux and the wr-kernel layer.
+
+
+Maintenance
+-----------
+This layer is maintained by Wind River Systems, Inc.
+Contact <support@windriver.com> or your support representative for more
+information on submitting changes.
+
+
+License
+-------
+Copyright (C) 2018 Wind River Systems, Inc.
+
+The right to copy, distribute or otherwise make use of this software may
+be licensed only pursuant to the terms of an applicable Wind River license
+agreement. No license to Wind River intellectual properly rights is granted
+herein. All rights not licensed by Wind River are reserved by Wind River.
+
+Source code included in the tree for individual recipes is under the LICENSE
+stated in each recipe (.bb file) unless otherwise stated.
+
+
+2. BSP Kernel and Distros
+=========================
+
+The following table summarizes the valid Wind River Linux distros for this BSP.
+'Y' in each content cell stands for supported; 'N' stands for not supported:
+
+  +--------------+-------------+-------------+-------------+
+  | valid/distro |   wrlinux   | wrlinux-cgl | wrlinux-ovp |
+  +--------------+-------------+-------------+-------------+
+  |    valid     |      Y      |      N      |      N      |
+  +--------------+-------------+-------------+-------------+
+
+For the supported kernel type for this BSP, please check the TARGET_SUPPORTED_KTYPES
+by running 'bitbake -e | grep "^TARGET_SUPPORTED_KTYPES"'.
+
+Note: The preempt-rt ktype is not available for this BSP/Machine at this time.
+
+
+3. Board Specific Patches
+=========================
+
+To get a list of patches applied to the kernel specific to this BSP,
+along with patch descriptions, use git to see what changed on the default
+kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
+
+  # cd tmp-glibc/work-shared/<bsp_name>/kernel-source
+  # git whatchanged standard/base..standard/intel-socfpga/sdk-4.12/intel-socfpga-64b
+
+
+4. Boot Instructions
+====================
+
+The DTB file can be built automatically or you can generate it manually in a
+single step.
+
+To generate the DTB manually, change into build directory, then run the
+following:
+
+  # bitbake -c devshell linux-windriver
+  # make altera/socfpga_stratix10_socdk.dtb"
+
+The DTB can then be found in the
+
+linux-<bsp_name>-<kernel type>-build/arch/arm64/boot/dts/altera
+
+directory.
+
+4.1 NFS Root File System
+------------------------
+
+Configure u-boot with target IP, tftp server, netmask and other required
+network values.
+ > tftp 0x80000 "/<tftp root>/Image"
+ > tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk.dtb"
+ > setenv bootargs console=ttyS1,115200 root=/dev/nfs rw \
+          nfsroot=<nfs server>:<nfs root>,nolock \
+          ip=<target IP>::<gateway>:<netmask>::eth0:off
+ > booti 0x80000 - 0x8000000
+
+4.2 Rootfs on MMC/SD
+--------------------
+
+An ext3/ext4 filesystem can be created on the MMC/SD using standard
+techniques.
+
+4.2.1 Deployment
+----------------
+
+After loading the kernel, pass kernel arguments like following:
+
+    root=/dev/mmcblk0p2 rw console=ttyS0,115200n8 rootwait
+
+4.3 RAM Root File System
+------------------------
+
+4.3.1 Create initramfs image
+----------------------------
+
+Build the gzipped initramfs image as follows:
+
+	# bitbake wrlinux-image-initramfs
+
+The expected rootfs cpio archive will be in
+"path_to_your_project/tmp/deploy/images/<bsp_name>", then
+try to create an U-Boot image file as follows:
+
+	# mkimage -A arm64 -T ramdisk -C gzip \
+	  -d wrlinux-image-initramfs-intel-socfpga-64b.cpio.gz \
+	  intel-socfpga-64b-initramfs.gz.uboot
+
+4.3.2 Deployment
+----------------
+
+After the BootLoader bootup, load initramfs, kernel and DTB:
+
+	# tftp 0x8000000 /<tftp root>/socfpga_stratix10_socdk.dtb
+	# tftp 0x80000 /<tftp root>/Image
+	# tftp 0x5000000 intel-socfpga-initramfs.gz.uboot
+
+then you need to set initrd_high to restrict positioning of initrd ramdisk images:
+
+	# setenv initrd_high 0x8000000
+
+and then you need to pass the kernel arguments as follows:
+
+	# setenv bootargs 'root=/dev/ram0 rw ramdisk_size=0x6400'
+
+Boot kernel with the following command:
+
+	# booti 0x80000 0x500000 0x8000000
+
+
+5. Features Notes
+=================
+
+5.1 LWH2F Bridge
+----------------
+The pre-built SD Image allows you to test out the Lightweight HPS-to-FPGA (LWH2F) bridge on the Stratix 10 SoC.
+This bridge connects the Hard Processor System (HPS) to the FPGA core logic and can control FPGA IPs such as FPGA
+LEDs and switches.
+
+5.1.1 Known issue
+-----------------
+Stratix 10 SOCFPGA doesn't support for controlling fpga bridge from linux kernel.
+We can enable/disable fpga bridge in bootloader with command "bridge enable/disable"
+
+5.2 FPGA IO
+-----------
+
+5.2.1 Control GPIO in u-boot
+----------------------------
+1) Once the HPS has boot up, press any key to stop the booting process in U-boot.
+   To enable the LWH2F bridge, type: bridge enable
+SOCFPGA_STRATIX10 # bridge enable
+
+2) Control the FPGA GPIO IP (which is connected to the FPGA LED) using the following command:
+- To turn off all LEDs(D21, D23, D25):
+SOCFPGA_STRATIX10 # mw f9001080 0
+
+- To turn on LED1(D21):
+SOCFPGA_STRATIX10 # mw f9001080 1
+
+- To turn on LED2(D23):
+SOCFPGA_STRATIX10 # mw f9001080 2
+
+- To turn on LED3(D25):
+SOCFPGA_STRATIX10 # mw f9001080 4
+
+- To turn on all LEDs(D21, D23, D25):
+SOCFPGA_STRATIX10 # mw f9001080 7
+
+5.2.2 Control GPIO in Linux
+---------------------------
+In order to control the FPGA LEDs from Linux, ensure that you have first run the "bridge enable"
+command and enable gpio_fpga dts node in U-boot, prior to booting to Linux. Detail commands as below:
+SOCFPGA_STRATIX10 # bridge enable
+SOCFPGA_STRATIX10 # tftpboot ${fdt_addr} ${serverip}:stratix10/socfpga_stratix10_socdk.dtb
+SOCFPGA_STRATIX10 # fdt addr ${fdt_addr}
+SOCFPGA_STRATIX10 # fdt resize
+SOCFPGA_STRATIX10 # fdt set /soc/gpio@f9001080 status okay
+
+Once you have logged in as root, you can use the
+following command to control the FPGA LEDs:
+- To turn on/off LED1(D21):
+root@stratix10swvp:~# echo 504 > /sys/class/gpio/export
+root@stratix10swvp:~# echo out > /sys/class/gpio/gpio504/direction
+root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio504/value
+root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio504/value
+
+- To turn on/off LED2(D23):
+root@stratix10swvp:~# echo 505 > export
+root@stratix10swvp:~# echo out > gpio505/direction
+root@stratix10swvp:~# echo 1 > gpio505/value
+root@stratix10swvp:~# echo 0 > gpio505/value
+
+- To turn on/off LED3(D25):
+root@stratix10swvp:~# echo 506 > export
+root@stratix10swvp:~# echo out > gpio506/direction
+root@stratix10swvp:~# echo 1 > gpio506/value
+root@stratix10swvp:~# echo 0 > gpio506/value
+
+5.3 HPS IO
+----------
+There are 3 LEDs on HPS IO48 OOBE Card that is a daughter card.
+Run below command to turn on/off the 3 LEDs.
+- To turn on/off HPS_LED1(D6):
+root@stratix10swvp:~# echo 1 > /sys/class/leds/hps_led0/brightness
+root@stratix10swvp:~# echo 0 > /sys/class/leds/hps_led0/brightness
+
+- To turn on/off HPS_LED2(D8):
+root@stratix10swvp:~# echo 1 > /sys/class/leds/hps_led1/brightness
+root@stratix10swvp:~# echo 0 > /sys/class/leds/hps_led1/brightness
+
+- To turn on/off HPS_LED3(D7):
+root@stratix10swvp:~# echo 1 > /sys/class/leds/hps_led2/brightness
+root@stratix10swvp:~# echo 0 > /sys/class/leds/hps_led2/brightness
+
+
+6. Creating Partitioned Images(WIC)
+===================================
+
+You can use the OpenEmbedded Image Creator, wic, to create a properly
+partitioned image on an SD card. The wic command generates partitioned images
+from existing OpenEmbedded build artifacts.
+For more information about WIC, see:
+
+http://www.yoctoproject.org/docs/2.2/mega-manual/mega-manual.html#creating-partitioned-images
+
+This BSP supports SD card disk images.
+After building the project, you will have a WIC image under the directory
+tmp-glibc/deploy/images/<bsp name>/, for example:
+
+tmp-glibc/deploy/images/intel-socfpga-64b/wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64b.wic
+
+You can then write the output image to an SD card.
+
+6.1 Burn images to SD card
+--------------------------
+
+To burn u-boot and WIC images to an SD card, you need to execute below command:
+
+# dd if=wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64b.wic of=/dev/your_sd_dev
+
+6.2 Set u-boot env
+-----------------
+
+The board can boot automatically by setting the following uboot environment variables:
+
+mmcboot=setenv bootargs earlycon root=${mmcroot} rw rootwait;booti ${loadaddr} - ${fdt_addr}
+mmcload=mmc rescan;load mmc 0:1 ${loadaddr} ${bootfile};load mmc 0:1 ${fdt_addr} ${fdtimage}
+mmcroot=/dev/mmcblk0p2
+
+=> setenv bootfile Image
+=> setenv fdtimage socfpga_stratix10_socdk.dtb
+=> setenv fdt_addr 8000000
+=> setenv loadaddr 0x80000
+=> setenv mmcroot /dev/mmcblk0p2
+=> setenv mmcboot 'setenv bootargs earlycon root=${mmcroot} rw rootwait;booti ${loadaddr} - ${fdt_addr}'
+=> setenv mmcload 'mmc rescan;load mmc 0:1 ${loadaddr} ${bootfile};load mmc 0:1 ${fdt_addr} ${fdtimage}'
+=> setenv bootcmd 'run mmcload; run linux_qspi_enable; run mmcboot'
+=> saveenv; run bootcmd;
+
+
+7. Tickless Feature
+===================
+When Tickless Feature is required, please add it by template in setup command line
+	--templates=feature/full_nohz
+
