@@ -6,7 +6,6 @@ PROVIDES += " virtual/bootloader u-boot"
 inherit deploy
 
 PARALLEL_MAKE=""
-PACKAGES=""
 
 # the following variables can be passed from the env
 # using BB_ENV_WHITELIST to override the defaults
@@ -49,18 +48,6 @@ UBOOT_MAKE_TARGET ?= "all"
 INC_PR = "r0"
 
 LICENSE = "GPLv2+"
-
-#do_compile () {
-#	unset LDFLAGS
-#	unset CFLAGS
-#	unset CPPFLAGS
-#	oe_runmake ${UBOOT_MACHINE}
-#	oe_runmake ${UBOOT_MAKE_TARGET}
-#}
-
-#do_compile_prepend() {
-#	oe_runmake mrproper
-#}
 
 do_install () {
     install -d ${D}/boot
