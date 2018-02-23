@@ -281,3 +281,31 @@ mmcroot=/dev/mmcblk0p2
 When Tickless Feature is required, please add it by template in setup command line
 	--templates=feature/full_nohz
 
+
+8. kexec/kdump
+==============
+
+To build the boot or capture kernel, use the following option with the configure
+command for your project:
+
+	--templates feature/kexec feature/kdump
+
+8.1 kexec
+---------
+Run below commands:
+
+	kexec -l  /root/Image.gz --append="`cat /proc/cmdline`"
+	kexec -e
+
+8.2 kdump
+---------
+For boot kernel:
+To reserve a memory region for the capture kernel, add "crashkernel=128M@128M" to the kernel cmdline.
+Then run below commands:
+	kexec -p /boot/Image.gz -append="`cat /proc/cmdline`"
+	echo c > /proc/sysrq-trigger
+
+For capture kernel:
+Please use "Image.gz" as boot capture kernel which can be found in the path
+build/tmp-glibc/deploy/images/intel-socfpga-64b. Before boot capture kernel,
+please add "maxcpus=1" to the boot parameter.
