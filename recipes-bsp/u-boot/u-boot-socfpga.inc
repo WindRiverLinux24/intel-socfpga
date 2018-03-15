@@ -11,6 +11,7 @@ PARALLEL_MAKE=""
 # using BB_ENV_WHITELIST to override the defaults
 UBOOT_REPO ?= "git://github.com/altera-opensource/u-boot-socfpga.git"
 UBOOT_BRANCH ?= "socfpga_v${PV}"
+UBOOT_BRANCH_arm = "socfpga_v${PV}_arria10_bringup"
 UBOOT_PROT ?= "http"
 
 SRC_URI = "${UBOOT_REPO};protocol=${UBOOT_PROT};branch=${UBOOT_BRANCH}"
@@ -38,9 +39,10 @@ UBOOT_IMAGE_SPL ?= "u-boot-spl-${MACHINE}-${PV}-${PR}.bin"
 UBOOT_ELF_SPL ?= "u-boot-spl-${MACHINE}-${PV}-${PR}"
 UBOOT_BINARY ?= "u-boot.bin"
 UBOOT_DTB ?= "u-boot-dtb.img"
+UBOOT ?= "u-boot.img"
 UBOOT_SYMLINK_ELF ?= "u-boot-${MACHINE}"
 UBOOT_SYMLINK ?= "u-boot-${MACHINE}.bin"
-UBOOT_DTB_SYMLINK ?= "u-boot-dtb-${MACHINE}.bin"
+UBOOT_DTB_SYMLINK ?= "u-boot-dtb-${MACHINE}.img"
 UBOOT_SYMLINK_UIMAGE ?= "u-boot-${MACHINE}.img"
 UBOOT_SYMLINK_SPL ?= "u-boot-spl-${MACHINE}.bin"
 UBOOT_SYMLINK_ELF_SPL ?= "u-boot-spl-${MACHINE}"
@@ -49,7 +51,7 @@ INC_PR = "r0"
 
 LICENSE = "GPLv2+"
 
-do_install () {
+do_install_append_aarch64 () {
     install -d ${D}/boot
     install ${WORKDIR}/build/${UBOOT_BINARY} ${D}/boot/${UBOOT_IMAGE}
     install ${WORKDIR}/build/${UBOOT_DTB} ${D}/boot/${UBOOT_DTB}
@@ -58,9 +60,17 @@ do_install () {
     ln -sf ${UBOOT_IMAGE} ${D}/boot/${UBOOT_BINARY}
 }
 
+do_install_append_arm () {
+    install -d ${D}/boot
+    install ${WORKDIR}/build/${UBOOT_BINARY} ${D}/boot/${UBOOT_IMAGE}
+    install ${WORKDIR}/build/${UBOOT} ${D}/boot/${UBOOT_DTB}
+    install ${WORKDIR}/build/u-boot ${D}/boot/${UBOOT_ELF}
+    ln -sf ${UBOOT_IMAGE} ${D}/boot/${UBOOT_BINARY}
+}
+
 FILES_${PN} = "/boot"
 
-do_deploy () {
+do_deploy_append_aarch64 () {
 	install ${WORKDIR}/build/u-boot.bin ${DEPLOYDIR}/${UBOOT_IMAGE}
 	install ${WORKDIR}/build/u-boot-dtb.img ${DEPLOYDIR}/${UBOOT_DTB}
 	install ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_IMAGE_UIMAGE}
@@ -79,6 +89,23 @@ do_deploy () {
 	ln -sf ${UBOOT_IMAGE_SPL} ${UBOOT_SYMLINK_SPL}
 	rm -f ${UBOOT_SYMLINK_ELF_SPL}
 	ln -sf ${UBOOT_ELF_SPL} ${UBOOT_SYMLINK_ELF_SPL}
+	rm -f ${UBOOT_SYMLINK_ELF}
+	ln -sf ${UBOOT_ELF} ${UBOOT_SYMLINK_ELF}
+}
+
+do_deploy_append_arm () {
+	install ${WORKDIR}/build/u-boot.bin ${DEPLOYDIR}/${UBOOT_IMAGE}
+	install ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_DTB}
+	install ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_IMAGE_UIMAGE}
+	install ${WORKDIR}/build/u-boot ${DEPLOYDIR}/${UBOOT_ELF}
+
+	cd ${DEPLOYDIR}
+	rm -f ${UBOOT_SYMLINK}
+	ln -sf ${UBOOT_IMAGE} ${UBOOT_SYMLINK}
+	rm -f ${UBOOT_DTB_SYMLINK}
+	ln -sf ${UBOOT_DTB} ${UBOOT_DTB_SYMLINK}
+	rm -f ${UBOOT_SYMLINK_UIMAGE}
+	ln -sf ${UBOOT_IMAGE_UIMAGE} ${UBOOT_SYMLINK_UIMAGE}
 	rm -f ${UBOOT_SYMLINK_ELF}
 	ln -sf ${UBOOT_ELF} ${UBOOT_SYMLINK_ELF}
 }
