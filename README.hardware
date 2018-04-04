@@ -61,6 +61,8 @@ the corresponding h/w features exist.
     + EEPROM: atmel,24c32
     + Temp: maxim,max1619
     + ADC: ltc2497
+    + Watchdog: Synopsys DesignWare APB Watchdog Timer
+    + FPGA manager
 
 2.2 Unsupported Features
 ========================
@@ -72,7 +74,6 @@ The following features are not supported and validated:
     x HPS bridge
     x PCIe: PCIe controller that is a hard IP in FPGA
     x NAND: CadenceDesign IP NAND Flash Memory Controller(There is no FPGA design supporting it)
-    x Watchdog: Stratix10 doesn't authorize watchdog register accessing.
     x SMP: CPU Hotplug, Stratix10 doesn't SMC intruction
 
 4. BSP Notes

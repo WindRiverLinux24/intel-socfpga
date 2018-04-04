@@ -282,30 +282,17 @@ When Tickless Feature is required, please add it by template in setup command li
 	--templates=feature/full_nohz
 
 
-8. kexec/kdump
-==============
+8. Update FPGA configuration file
+=================================
+8.1 On the target, copy FPGA configuration file(*.rbf) to rootfs/lib/firmware,
+    and make sure the name of *.rbf file is soc_s10_fpga_config.rbf.
+	# cp xxx/ghrd_1sx280lu2f50e2vgs3_hps.rbf /lib/firmware/soc_s10_fpga_config.rbf
+	# cp xxx/socfpga_stratix10_fpga_update.dtb /lib/firmware/
 
-To build the boot or capture kernel, use the following option with the configure
-command for your project:
+8.2 On the target, apply the overlay
+	# mkdir /sys/kernel/config/device-tree/overlays/0
+	# cd /lib/firmware/
+	# echo socfpga_stratix10_fpga_update.dtb > /sys/kernel/config/device-tree/overlays/0/path
 
-	--templates feature/kexec feature/kdump
-
-8.1 kexec
----------
-Run below commands:
-
-	kexec -l  /root/Image.gz --append="`cat /proc/cmdline`"
-	kexec -e
-
-8.2 kdump
----------
-For boot kernel:
-To reserve a memory region for the capture kernel, add "crashkernel=128M@128M" to the kernel cmdline.
-Then run below commands:
-	kexec -p /boot/Image.gz -append="`cat /proc/cmdline`"
-	echo c > /proc/sysrq-trigger
-
-For capture kernel:
-Please use "Image.gz" as boot capture kernel which can be found in the path
-build/tmp-glibc/deploy/images/intel-socfpga-64b. Before boot capture kernel,
-please add "maxcpus=1" to the boot parameter.
+8.3 On the target, if you want to do programming again, delete the overlay first before doing step 9.2.
+	# rmdir /sys/kernel/config/device-tree/overlays/0
