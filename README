@@ -203,16 +203,16 @@ root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio504/value
 root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio504/value
 
 - To turn on/off LED2(D23):
-root@stratix10swvp:~# echo 505 > export
-root@stratix10swvp:~# echo out > gpio505/direction
-root@stratix10swvp:~# echo 1 > gpio505/value
-root@stratix10swvp:~# echo 0 > gpio505/value
+root@stratix10swvp:~# echo 505 > /sys/class/gpio/export
+root@stratix10swvp:~# echo out > /sys/class/gpio/gpio505/direction
+root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio505/value
+root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio505/value
 
 - To turn on/off LED3(D25):
-root@stratix10swvp:~# echo 506 > export
-root@stratix10swvp:~# echo out > gpio506/direction
-root@stratix10swvp:~# echo 1 > gpio506/value
-root@stratix10swvp:~# echo 0 > gpio506/value
+root@stratix10swvp:~# echo 506 > /sys/class/gpio/export
+root@stratix10swvp:~# echo out > /sys/class/gpio/gpio506/direction
+root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio506/value
+root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio506/value
 
 5.3 HPS IO
 ----------
@@ -294,5 +294,5 @@ When Tickless Feature is required, please add it by template in setup command li
 	# cd /lib/firmware/
 	# echo socfpga_stratix10_fpga_update.dtb > /sys/kernel/config/device-tree/overlays/0/path
 
-8.3 On the target, if you want to do programming again, delete the overlay first before doing step 9.2.
+8.3 On the target, if you want to do programming again, delete the overlay first before doing step 8.2.
 	# rmdir /sys/kernel/config/device-tree/overlays/0
