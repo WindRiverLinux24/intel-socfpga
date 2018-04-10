@@ -85,12 +85,12 @@ directory.
 
 Configure u-boot with target IP, tftp server, netmask and other required
 network values.
- > tftp 0x80000 "/<tftp root>/Image"
+ > tftp 0x2000000 "/<tftp root>/Image"
  > tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk.dtb"
  > setenv bootargs console=ttyS1,115200 root=/dev/nfs rw \
           nfsroot=<nfs server>:<nfs root>,nolock \
           ip=<target IP>::<gateway>:<netmask>::eth0:off
- > booti 0x80000 - 0x8000000
+ > booti 0x2000000 - 0x8000000
 
 4.2 Rootfs on MMC/SD
 --------------------
@@ -129,7 +129,7 @@ try to create an U-Boot image file as follows:
 After the BootLoader bootup, load initramfs, kernel and DTB:
 
 	# tftp 0x8000000 /<tftp root>/socfpga_stratix10_socdk.dtb
-	# tftp 0x80000 /<tftp root>/Image
+	# tftp 0x2000000 /<tftp root>/Image
 	# tftp 0x5000000 intel-socfpga-initramfs.gz.uboot
 
 then you need to set initrd_high to restrict positioning of initrd ramdisk images:
@@ -142,7 +142,7 @@ and then you need to pass the kernel arguments as follows:
 
 Boot kernel with the following command:
 
-	# booti 0x80000 0x500000 0x8000000
+	# booti 0x2000000 0x500000 0x8000000
 
 
 5. Features Notes
@@ -268,7 +268,7 @@ mmcroot=/dev/mmcblk0p2
 => setenv bootfile Image
 => setenv fdtimage socfpga_stratix10_socdk.dtb
 => setenv fdt_addr 8000000
-=> setenv loadaddr 0x80000
+=> setenv loadaddr 0x2000000
 => setenv mmcroot /dev/mmcblk0p2
 => setenv mmcboot 'setenv bootargs earlycon root=${mmcroot} rw rootwait;booti ${loadaddr} - ${fdt_addr}'
 => setenv mmcload 'mmc rescan;load mmc 0:1 ${loadaddr} ${bootfile};load mmc 0:1 ${fdt_addr} ${fdtimage}'
