@@ -63,6 +63,7 @@ the corresponding h/w features exist.
     + ADC: ltc2497
     + Watchdog: Synopsys DesignWare APB Watchdog Timer
     + FPGA manager
+    + Remote System Update
 
 2.2 Unsupported Features
 ========================
