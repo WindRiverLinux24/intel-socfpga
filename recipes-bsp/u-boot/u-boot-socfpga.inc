@@ -32,7 +32,7 @@ python () {
 		raise bb.parse.SkipPackage("because UBOOT_MACHINE is not set")
 }
 
-UBOOT_ELF ?= "u-boot-${MACHINE}-${PV}-${PR}"
+UBOOT_ELF_IMG ?= "u-boot-${MACHINE}-${PV}-${PR}"
 UBOOT_IMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.bin"
 UBOOT_IMAGE_UIMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.img"
 UBOOT_IMAGE_SPL ?= "u-boot-spl-${MACHINE}-${PV}-${PR}.bin"
@@ -53,30 +53,30 @@ LICENSE = "GPLv2+"
 
 do_install_append_aarch64 () {
     install -d ${D}/boot
-    install ${WORKDIR}/build/${UBOOT_BINARY} ${D}/boot/${UBOOT_IMAGE}
-    install ${WORKDIR}/build/${UBOOT_DTB} ${D}/boot/${UBOOT_DTB}
-    install ${WORKDIR}/build/spl/u-boot-spl ${D}/boot/${UBOOT_ELF_SPL}
-    install ${WORKDIR}/build/u-boot ${D}/boot/${UBOOT_ELF}
+    install -m 644 ${WORKDIR}/build/${UBOOT_BINARY} ${D}/boot/${UBOOT_IMAGE}
+    install -m 644 ${WORKDIR}/build/${UBOOT_DTB} ${D}/boot/${UBOOT_DTB}
+    install -m 644 ${WORKDIR}/build/spl/u-boot-spl ${D}/boot/${UBOOT_ELF_SPL}
+    install -m 644 ${WORKDIR}/build/u-boot ${D}/boot/${UBOOT_ELF_IMG}
     ln -sf ${UBOOT_IMAGE} ${D}/boot/${UBOOT_BINARY}
 }
 
 do_install_append_arm () {
     install -d ${D}/boot
-    install ${WORKDIR}/build/${UBOOT_BINARY} ${D}/boot/${UBOOT_IMAGE}
-    install ${WORKDIR}/build/${UBOOT} ${D}/boot/${UBOOT_DTB}
-    install ${WORKDIR}/build/u-boot ${D}/boot/${UBOOT_ELF}
+    install -m 644 ${WORKDIR}/build/${UBOOT_BINARY} ${D}/boot/${UBOOT_IMAGE}
+    install -m 644 ${WORKDIR}/build/${UBOOT} ${D}/boot/${UBOOT_DTB}
+    install -m 644 ${WORKDIR}/build/u-boot ${D}/boot/${UBOOT_ELF_IMG}
     ln -sf ${UBOOT_IMAGE} ${D}/boot/${UBOOT_BINARY}
 }
 
 FILES_${PN} = "/boot"
 
 do_deploy_append_aarch64 () {
-	install ${WORKDIR}/build/u-boot.bin ${DEPLOYDIR}/${UBOOT_IMAGE}
-	install ${WORKDIR}/build/u-boot-dtb.img ${DEPLOYDIR}/${UBOOT_DTB}
-	install ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_IMAGE_UIMAGE}
-	install ${WORKDIR}/build/spl/u-boot-spl.bin ${DEPLOYDIR}/${UBOOT_IMAGE_SPL}
-	install ${WORKDIR}/build/spl/u-boot-spl ${DEPLOYDIR}/${UBOOT_ELF_SPL}
-	install ${WORKDIR}/build/u-boot ${DEPLOYDIR}/${UBOOT_ELF}
+	install -m 644 ${WORKDIR}/build/u-boot.bin ${DEPLOYDIR}/${UBOOT_IMAGE}
+	install -m 644 ${WORKDIR}/build/u-boot-dtb.img ${DEPLOYDIR}/${UBOOT_DTB}
+	install -m 644 ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_IMAGE_UIMAGE}
+	install -m 644 ${WORKDIR}/build/spl/u-boot-spl.bin ${DEPLOYDIR}/${UBOOT_IMAGE_SPL}
+	install -m 644 ${WORKDIR}/build/spl/u-boot-spl ${DEPLOYDIR}/${UBOOT_ELF_SPL}
+	install -m 644 ${WORKDIR}/build/u-boot ${DEPLOYDIR}/${UBOOT_ELF_IMG}
 
 	cd ${DEPLOYDIR}
 	rm -f ${UBOOT_SYMLINK}
@@ -90,14 +90,14 @@ do_deploy_append_aarch64 () {
 	rm -f ${UBOOT_SYMLINK_ELF_SPL}
 	ln -sf ${UBOOT_ELF_SPL} ${UBOOT_SYMLINK_ELF_SPL}
 	rm -f ${UBOOT_SYMLINK_ELF}
-	ln -sf ${UBOOT_ELF} ${UBOOT_SYMLINK_ELF}
+	ln -sf ${UBOOT_ELF_IMG} ${UBOOT_SYMLINK_ELF}
 }
 
 do_deploy_append_arm () {
-	install ${WORKDIR}/build/u-boot.bin ${DEPLOYDIR}/${UBOOT_IMAGE}
-	install ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_DTB}
-	install ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_IMAGE_UIMAGE}
-	install ${WORKDIR}/build/u-boot ${DEPLOYDIR}/${UBOOT_ELF}
+	install -m 644 ${WORKDIR}/build/u-boot.bin ${DEPLOYDIR}/${UBOOT_IMAGE}
+	install -m 644 ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_DTB}
+	install -m 644 ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/${UBOOT_IMAGE_UIMAGE}
+	install -m 644 ${WORKDIR}/build/u-boot ${DEPLOYDIR}/${UBOOT_ELF_IMG}
 
 	cd ${DEPLOYDIR}
 	rm -f ${UBOOT_SYMLINK}
@@ -107,6 +107,6 @@ do_deploy_append_arm () {
 	rm -f ${UBOOT_SYMLINK_UIMAGE}
 	ln -sf ${UBOOT_IMAGE_UIMAGE} ${UBOOT_SYMLINK_UIMAGE}
 	rm -f ${UBOOT_SYMLINK_ELF}
-	ln -sf ${UBOOT_ELF} ${UBOOT_SYMLINK_ELF}
+	ln -sf ${UBOOT_ELF_IMG} ${UBOOT_SYMLINK_ELF}
 }
 addtask deploy before do_build after do_compile
