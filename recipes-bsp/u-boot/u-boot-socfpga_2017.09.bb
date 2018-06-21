@@ -1,7 +1,7 @@
 require recipes-bsp/u-boot/u-boot.inc
 # This revision is the v2017.09 release
 require u-boot-socfpga.inc
-SRCREV = "475f14cf687f8f122a25922b04d1c185a7c85d7d"
+SRCREV = "17b1dbd4cd532004302bbc5ba951d0a0e75c3722"
 SRCREV_arm = "2a2102e92e470beec51d8b2dea8323cfc92f92b1"
 
 LICENSE = "GPLv2+"
