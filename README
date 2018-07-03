@@ -839,3 +839,41 @@ The status is basically as before, just that the currently running image is now 
 	    ERROR LOC: 0x00000000
 	ERROR DETAILS: 0x00000000
 	Operation completed
+
+
+10. Memory ECC
+==============
+
+10.1 Enable ECC feature
+-----------------------
+
+Please refer to below link:
+https://rocketboards.org/foswiki/Documentation/S10GSRDEnableHPS_DDR_ECC
+
+If ECC feature is enabled, when board boots up, there is below output information.
+SDRAM: Initializing ECC 0x00000000 - 0x80000000
+SDRAM-ECC: Initialized success with 1343 ms
+
+10.2 Verify ECC feature
+-----------------------
+
+Check whether ECC feature take effect, please follow below steps.
+
+1) Enable kernel configure and then rebuild kernel
+	CONFIG_EDAC_DEBUG=y
+
+2) Boot up system and then login.
+
+3) Check the error count
+	# cat /sys/devices/system/edac/mc/mc0/ce_count
+	0 (It should be zero)
+
+4) Inject error
+	#echo "C" > /sys/kernel/debug/edac/mc0/altr_trigger
+	EDAC MC: Inject Single bit error
+	EDAC MC0: 1 CE soc:eccmgr:sdramedac on mc#0csrow#0channel#0 (csrow:0 channel:0 page:0x0 offset:0x0 grain:8 syndrome:0x0)
+	EDAC MC: Read Data [0x5A5A5A5A, 0xA5A5A5A5]
+
+5) Check the error count again
+	# cat /sys/devices/system/edac/mc/mc0/ce_count
+	1 (It should be incremented by 1)

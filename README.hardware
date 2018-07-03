@@ -64,6 +64,7 @@ the corresponding h/w features exist.
     + Watchdog: Synopsys DesignWare APB Watchdog Timer
     + FPGA manager
     + Remote System Update
+    + Memory ECC
 
 2.2 Unsupported Features
 ========================
