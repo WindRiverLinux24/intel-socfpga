@@ -1,0 +1,98 @@
+From a254406aaa0f849e76614869c73305daffd2d64c Mon Sep 17 00:00:00 2001
+From: MengLi <meng.li@windriver.com>
+Date: Fri, 3 Aug 2018 16:24:08 +0800
+Subject: [PATCH] intel-rsu: modify makefile to be compatible with yocto build
+ system
+
+RallyID: US116545
+
+Package intel-rsu is from https://github.com/altera-opensource/intel-rsu
+It only supports standalone building, so modify makefile to be
+compatible with yocto build system, and then integrate this package into
+BSP intel-socfpga.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ example/makefile | 22 ++++++++--------------
+ lib/makefile     | 12 ++++++------
+ 2 files changed, 14 insertions(+), 20 deletions(-)
+
+diff --git a/example/makefile b/example/makefile
+index 94b48a4..421ff6a 100644
+--- a/example/makefile
++++ b/example/makefile
+@@ -6,26 +6,20 @@ INSTALL_PATH ?= /usr/bin
+ 
+ SRC := rsu_client.c
+ 
+-CFLAGS := -I../include/
+-LDFLAGS := -L../lib/ -lrsu -lz
++CFLAGS := -I../include/ $(CFLAGS)
++LDFLAGS := -L../lib/ -lrsu -lz $(LDFLAGS)
+ 
+ all: rsu_client
+ 
+-install: rsu_client lib
+-	cd ../lib/; make install
+-	cp rsu_client ${INSTALL_PATH}/rsu_client
++install: rsu_client
++	install -m 755 -d $(DESTDIR)$(bindir)
++	install -m 755 rsu_client $(DESTDIR)$(bindir)
+ 
+-rsu_client: $(SRC:.c=.o) lib
+-	$(CROSS_COMPILE)gcc -o $@ $(SRC:.c=.o) $(LDFLAGS)
++rsu_client: $(SRC:.c=.o)
++	$(CC) -o $@ $(SRC:.c=.o) $(LDFLAGS)
+ 
+ %.o : %.c
+-	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
+-
+-lib: ../lib/librsu.so
+-
+-../lib/librsu.so:
+-	cd ../lib/; make all
++	$(CC) $(CFLAGS) -c $< -o $@
+ 
+ clean:
+ 	rm -rf $(SRC:.c=.o) rsu_client
+-	cd ../lib/; make clean
+diff --git a/lib/makefile b/lib/makefile
+index 6433558..28f7828 100644
+--- a/lib/makefile
++++ b/lib/makefile
+@@ -7,26 +7,26 @@ LIBRSU_VER = 0
+ 
+ SRC := $(wildcard *.c)
+ 
+-CFLAGS := -I../include/ -fPIC -fPIE
++CFLAGS := -I../include/ -fPIC -fPIE $(CFLAGS)
+ CFLAGS += -fstack-protector-strong
+ CFLAGS += -O2 -D_FORTIFY_SOURCE=2
+ CFLAGS += -Wformat -Wformat-security
+ 
+-LDFLAGS := -shared
++LDFLAGS := -shared $(LDFLAGS)
+ LDFLAGS += -z noexecstack
+ LDFLAGS += -z relro -z now
+ 
+ all: librsu.so
+ 
+ install: librsu.so
+-	cp librsu.so $(INSTALL_PATH)/librsu.so.$(LIBRSU_VER)
+-	ln -s $(INSTALL_PATH)/librsu.so.$(LIBRSU_VER) $(INSTALL_PATH)/librsu.so
++	install -m 755 -d $(DESTDIR)$(libdir)
++	install -m 755 librsu.so $(DESTDIR)$(libdir)
+ 
+ librsu.so: $(SRC:.c=.o)
+-	$(CROSS_COMPILE)gcc $(LDFLAGS) -o $@ $(SRC:.c=.o)
++	$(CC) $(LDFLAGS) -o $@ $(SRC:.c=.o)
+ 
+ %.o : %.c
+-	$(CROSS_COMPILE)gcc $(CFLAGS) -fPIC -c $< -o $@
++	$(CC) $(CFLAGS) -fPIC -c $< -o $@
+ 
+ clean:
+ 	rm -rf $(SRC:.c=.o) librsu.so
+-- 
+2.7.4
+
