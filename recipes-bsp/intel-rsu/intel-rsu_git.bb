@@ -17,7 +17,7 @@ SRC_URI = "git://github.com/altera-opensource/intel-rsu.git;protocol=http;branch
 	file://0001-intel-rsu-modify-makefile-to-be-compatible-with-yoct.patch"
 SRCREV = "a9e07539bb5cda0305e84e0d62654bfb0fb28f01"
 
-EXTRA_OEMAKE = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS}"'
+EXTRA_OEMAKE = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${CC} ${TOOLCHAIN_OPTIONS}"'
 EXTRA_OEMAKE += 'HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}"'
 
 
