@@ -11,7 +11,7 @@ PV = "1.0.0"
 S = "${WORKDIR}/git"
 
 FILES_${PN} += "${libdir}/librsu.so"
-FILES_${PN}-dev = ""
+FILES_${PN}-dev = "${includedir}"
 
 SRC_URI = "git://github.com/altera-opensource/intel-rsu.git;protocol=http;branch=master \
 	file://0001-intel-rsu-modify-makefile-to-be-compatible-with-yoct.patch"
@@ -31,4 +31,6 @@ do_install () {
     oe_runmake -C ${S}/example install DESTDIR=${D}
     install -d ${D}/etc
     install -m 755 ${S}/etc/qspi.rc ${D}/etc/librsu.rc
+    install -m 755 -d ${D}${includedir}
+    install -m 755 ${S}/lib/*.h ${D}${includedir}
 }
