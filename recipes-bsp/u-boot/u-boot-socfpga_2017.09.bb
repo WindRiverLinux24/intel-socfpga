@@ -1,14 +1,23 @@
+require u-boot-socfpga-common.inc
 require recipes-bsp/u-boot/u-boot.inc
 # This revision is the v2017.09 release
-require u-boot-socfpga.inc
-SRCREV = "17b1dbd4cd532004302bbc5ba951d0a0e75c3722"
+SRCREV = "c6316edf709a49d52f2c613eda6f15994ce7cd31"
 SRCREV_arm = "2a2102e92e470beec51d8b2dea8323cfc92f92b1"
 
-LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
-LIC_FILES_CHKSUM_arm = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
+UBOOT_REPO ?= "git://github.com/altera-opensource/u-boot-socfpga.git"
+UBOOT_BRANCH ?= "socfpga_v${PV}"
+UBOOT_BRANCH_arm = "socfpga_v${PV}_arria10_bringup"
+UBOOT_PROT ?= "http"
 
-PV = "2017.09"
-PV_arm = "2014.10"
+SRC_URI = "${UBOOT_REPO};protocol=${UBOOT_PROT};branch=${UBOOT_BRANCH}"
 
 DEPENDS += "dtc-native"
+
+do_deploy_append_aarch64 () {
+	install -m 644 ${WORKDIR}/build/u-boot-dtb.img ${DEPLOYDIR}/u-boot-dtb.img
+}
+
+do_deploy_append_arm () {
+	install -m 644 ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/u-boot-dtb.img
+}
+addtask deploy before do_build after do_compile
