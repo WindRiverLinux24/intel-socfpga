@@ -12,4 +12,8 @@ SRC_URI = "git://git.denx.de/u-boot.git;branch=master"
 
 S = "${WORKDIR}/git"
 
+do_deploy_append_arm () {
+	install -m 644 ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/u-boot-dtb.img
+}
+
 RPROVIDES_${PN} += "u-boot"
