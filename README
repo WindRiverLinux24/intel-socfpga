@@ -59,7 +59,7 @@ along with patch descriptions, use git to see what changed on the default
 kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
 
   # cd tmp-glibc/work-shared/<bsp_name>/kernel-source
-  # git whatchanged standard/base..standard/intel-socfpga/sdk-4.12/intel-socfpga-64b
+  # git whatchanged standard/base..standard/intel-socfpga/sdk-4.12/intel-socfpga-64
 
 
 4. Boot Instructions
@@ -120,8 +120,8 @@ The expected rootfs cpio archive will be in
 try to create an U-Boot image file as follows:
 
 	# mkimage -A arm64 -T ramdisk -C gzip \
-	  -d wrlinux-image-initramfs-intel-socfpga-64b.cpio.gz \
-	  intel-socfpga-64b-initramfs.gz.uboot
+	  -d wrlinux-image-initramfs-intel-socfpga-64.cpio.gz \
+	  intel-socfpga-64-initramfs.gz.uboot
 
 4.3.2 Deployment
 ----------------
@@ -245,7 +245,7 @@ This BSP supports SD card disk images.
 After building the project, you will have a WIC image under the directory
 tmp-glibc/deploy/images/<bsp name>/, for example:
 
-tmp-glibc/deploy/images/intel-socfpga-64b/wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64b.wic
+tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64.wic
 
 You can then write the output image to an SD card.
 
@@ -254,7 +254,7 @@ You can then write the output image to an SD card.
 
 To burn u-boot and WIC images to an SD card, you need to execute below command:
 
-# dd if=wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64b.wic of=/dev/your_sd_dev
+# dd if=wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64.wic of=/dev/your_sd_dev
 
 6.2 Set u-boot env
 -----------------
@@ -526,7 +526,7 @@ The following commands is used to create the SD card image:
 	# cp ../linux-socfpga/arch/arm64/boot/Image .
 	# cp ../linux-socfpga/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dtb .
 	# mkdir rootfs && cd rootfs
-	# sudo tar jxf <project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64b/wrlinux-image-glibc-std-intel-socfpga-64b-<generation time>.rootfs.tar.bz2
+	# sudo tar jxf <project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-glibc-std-intel-socfpga-64-<generation time>.rootfs.tar.bz2
 	# for version in {0..3}
 	  do
 		sudo cp ../../image_files/ghrd_hps.$version.rpd root/

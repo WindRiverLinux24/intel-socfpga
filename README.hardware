@@ -21,6 +21,7 @@ This BSP supports the following boards:
 =================
 
   - 2018/03 (US106539)RCPL-10.17.41.4: Add Intel Stratix 10 SOCFPGA board support
+  - 2018/11 (US117993)Release-10.18: Add Intel Stratix 10 SOCFPGA board support 	
 
 3. BSP Features
 ===============

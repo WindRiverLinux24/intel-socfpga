@@ -1,0 +1,71 @@
+From d22c743715431fa20f4dea4f3650ee4ae2cdc834 Mon Sep 17 00:00:00 2001
+From: MengLi <meng.li@windriver.com>
+Date: Sat, 29 Sep 2018 17:44:26 +0800
+Subject: [PATCH] u-boot: armv8: psci: improve PSCI_TABLE define to be
+ compatiable with latest binutils
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+binutils package introduce commit 79e741920446(“[BFD][AARCH64]
+Disallow R_AARCH64_ABS32(LP64) & R_AARCH64_ABS16 in const section
+of shared object"). It requires that under LP64, the address should
+be 64-bit. R_AARCH64_ABS32 relocation indicates an address that is
+only sized 32 bits which is meaningless in LP64 shared object.
+Therefore, improve PSCI_TABLE define, change .word into dword so that
+alloc 64 bits space for psci function pointer.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ arch/arm/cpu/armv8/psci.S             | 8 ++++----
+ arch/arm/mach-socfpga/lowlevel_init.S | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm/cpu/armv8/psci.S b/arch/arm/cpu/armv8/psci.S
+index fc31c70..66ea02e 100644
+--- a/arch/arm/cpu/armv8/psci.S
++++ b/arch/arm/cpu/armv8/psci.S
+@@ -21,8 +21,8 @@
+ 
+ /* PSCI function and ID table definition*/
+ #define PSCI_TABLE(__id, __fn) \
+-	.word __id; \
+-	.word __fn
++	.dword __id; \
++	.dword __fn
+ 
+ .pushsection ._secure.text, "ax"
+ 
+@@ -135,12 +135,12 @@ PSCI_TABLE(0, 0)
+ handle_psci:
+ 	psci_enter
+ 1:	ldr x10, [x9]			/* Load PSCI function table */
+-	ubfx x11, x10, #32, #32
++	ldr x11, [x9, #8]
+ 	ubfx x10, x10, #0, #32
+ 	cbz	x10, 3f			/* If reach the end, bail out */
+ 	cmp	x10, x0
+ 	b.eq	2f			/* PSCI function found */
+-	add x9, x9, #8			/* If not match, try next entry */
++	add x9, x9, #16			/* If not match, try next entry */
+ 	b	1b
+ 
+ 2:	blr	x11			/* Call PSCI function */
+diff --git a/arch/arm/mach-socfpga/lowlevel_init.S b/arch/arm/mach-socfpga/lowlevel_init.S
+index 04720b6..571db79 100644
+--- a/arch/arm/mach-socfpga/lowlevel_init.S
++++ b/arch/arm/mach-socfpga/lowlevel_init.S
+@@ -12,8 +12,8 @@
+ #if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_ARMV8_PSCI)
+ .align 3
+ _el3_exception_vectors:
+-	.word el3_exception_vectors;
+-	.word 0
++	.dword el3_exception_vectors;
++	.dword 0
+ #endif
+ 
+ ENTRY(lowlevel_init)
+-- 
+2.7.4
+
