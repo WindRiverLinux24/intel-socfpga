@@ -15,7 +15,7 @@ Table of Contents
 
 This BSP supports the following boards:
 
-  + Intel Stratix 10 SOCFPGA board: CotexA53 processor, Rev Rev A1 Board.
+  + Intel Stratix 10 SOCFPGA board: CortexA53 processor, Rev Rev A1 Board.
 
 2. Change History
 =================

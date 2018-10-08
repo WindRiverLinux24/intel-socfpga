@@ -71,7 +71,7 @@ single step.
 To generate the DTB manually, change into build directory, then run the
 following:
 
-  # bitbake -c devshell linux-windriver
+  # bitbake -c devshell linux-yocto-dev
   # make altera/socfpga_stratix10_socdk.dtb"
 
 The DTB can then be found in the
