@@ -159,62 +159,7 @@ LEDs and switches.
 Stratix 10 SOCFPGA doesn't support for controlling fpga bridge from linux kernel.
 We can enable/disable fpga bridge in bootloader with command "bridge enable/disable"
 
-5.2 FPGA IO
------------
-
-5.2.1 Control GPIO in u-boot
-----------------------------
-1) Once the HPS has boot up, press any key to stop the booting process in U-boot.
-   To enable the LWH2F bridge, type: bridge enable
-SOCFPGA_STRATIX10 # bridge enable
-
-2) Control the FPGA GPIO IP (which is connected to the FPGA LED) using the following command:
-- To turn off all LEDs(D21, D23, D25):
-SOCFPGA_STRATIX10 # mw f9001080 0
-
-- To turn on LED1(D21):
-SOCFPGA_STRATIX10 # mw f9001080 1
-
-- To turn on LED2(D23):
-SOCFPGA_STRATIX10 # mw f9001080 2
-
-- To turn on LED3(D25):
-SOCFPGA_STRATIX10 # mw f9001080 4
-
-- To turn on all LEDs(D21, D23, D25):
-SOCFPGA_STRATIX10 # mw f9001080 7
-
-5.2.2 Control GPIO in Linux
----------------------------
-In order to control the FPGA LEDs from Linux, ensure that you have first run the "bridge enable"
-command and enable gpio_fpga dts node in U-boot, prior to booting to Linux. Detail commands as below:
-SOCFPGA_STRATIX10 # bridge enable
-SOCFPGA_STRATIX10 # tftpboot ${fdt_addr} ${serverip}:stratix10/socfpga_stratix10_socdk.dtb
-SOCFPGA_STRATIX10 # fdt addr ${fdt_addr}
-SOCFPGA_STRATIX10 # fdt resize
-SOCFPGA_STRATIX10 # fdt set /soc/gpio@f9001080 status okay
-
-Once you have logged in as root, you can use the
-following command to control the FPGA LEDs:
-- To turn on/off LED1(D21):
-root@stratix10swvp:~# echo 504 > /sys/class/gpio/export
-root@stratix10swvp:~# echo out > /sys/class/gpio/gpio504/direction
-root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio504/value
-root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio504/value
-
-- To turn on/off LED2(D23):
-root@stratix10swvp:~# echo 505 > /sys/class/gpio/export
-root@stratix10swvp:~# echo out > /sys/class/gpio/gpio505/direction
-root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio505/value
-root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio505/value
-
-- To turn on/off LED3(D25):
-root@stratix10swvp:~# echo 506 > /sys/class/gpio/export
-root@stratix10swvp:~# echo out > /sys/class/gpio/gpio506/direction
-root@stratix10swvp:~# echo 1 > /sys/class/gpio/gpio506/value
-root@stratix10swvp:~# echo 0 > /sys/class/gpio/gpio506/value
-
-5.3 HPS IO
+5.2 HPS IO
 ----------
 There are 3 LEDs on HPS IO48 OOBE Card that is a daughter card.
 Run below command to turn on/off the 3 LEDs.
