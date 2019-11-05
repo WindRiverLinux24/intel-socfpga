@@ -1,19 +1,10 @@
-HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
+HOMEPAGE = "https://github.com/altera-opensource/u-boot-socfpga"
 SECTION = "bootloaders"
 
-LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
-LIC_FILES_CHKSUM_arm = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
+PV_append = "+git${SRCPV}"
 
-PV = "2017.09"
-PV_arm = "2014.10"
-
-SRC_URI = "git://git.denx.de/u-boot.git;branch=master"
+SRC_URI = "git://github.com/altera-opensource/u-boot-socfpga.git;branch=socfpga_v2019.04"
 
 S = "${WORKDIR}/git"
-
-do_deploy_append_arm () {
-	install -m 644 ${WORKDIR}/build/u-boot.img ${DEPLOYDIR}/u-boot-dtb.img
-}
 
 RPROVIDES_${PN} += "u-boot"
