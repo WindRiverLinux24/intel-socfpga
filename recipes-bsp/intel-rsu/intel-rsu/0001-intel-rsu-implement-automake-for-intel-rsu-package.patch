@@ -180,7 +180,7 @@ index 0000000..23f0a1e
 +	librsu_image.c librsu_image.h librsu_ll.h librsu_ll_qspi.c librsu_misc.c librsu_misc.h librsu_qspi.h
 +librsu_la_CFLAGS = $(AM_CFLAGS)
 +librsu_la_LDFLAGS = $(LTLDFLAGS)
-+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/lib
++AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/lib -DLIBRSU_VER=$(LIBRSU_VER)
 +LIBS = -lz
 diff --git a/lib/makefile b/lib/makefile
 deleted file mode 100644
@@ -216,7 +216,7 @@ index 6433558..0000000
 -	$(CROSS_COMPILE)gcc $(LDFLAGS) -o $@ $(SRC:.c=.o)
 -
 -%.o : %.c
--	$(CROSS_COMPILE)gcc $(CFLAGS) -fPIC -c $< -o $@
+-	$(CROSS_COMPILE)gcc $(CFLAGS) -DLIBRSU_VER=$(LIBRSU_VER) -fPIC -c $< -o $@
 -
 -clean:
 -	rm -rf $(SRC:.c=.o) librsu.so
