@@ -146,7 +146,7 @@ After the BootLoader bootup, load initramfs, kernel and DTB:
 
 	# tftp 0x8000000 /<tftp root>/socfpga_stratix10_socdk.dtb
 	# tftp 0x2000000 /<tftp root>/Image
-	# tftp 0x5000000 intel-socfpga-initramfs.gz.uboot
+	# tftp 0x5000000 intel-socfpga-64-initramfs.gz.uboot
 
 then you need to set initrd_high to restrict positioning of initrd ramdisk images:
 
@@ -158,7 +158,7 @@ and then you need to pass the kernel arguments as follows:
 
 Boot kernel with the following command:
 
-	# booti 0x2000000 0x500000 0x8000000
+	# booti 0x2000000 0x5000000 0x8000000
 
 
 5. Features Notes
@@ -837,13 +837,13 @@ You need to add feature/kexec,feature/kdump templates support as follow:
 
 	./wrlinux-x/setup.sh --machines intel-socfpga --templates feature/kexec,feature/kdump
 
-6.1 kexec
+11.1 kexec
 ---------
 
 	kexec -l  /root/Image.gz --append="`cat /proc/cmdline`"
 	kexec -e
 
-6.2 kdump
+11.2 kdump
 ---------
 
 Add crashkernel=256M@256M to the kernel cmdline
