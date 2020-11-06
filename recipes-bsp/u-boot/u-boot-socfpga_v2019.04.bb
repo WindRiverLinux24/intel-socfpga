@@ -10,7 +10,7 @@ DEPENDS += "dtc-native bc-native bison-native u-boot-mkimage-native"
 
 do_git_checkout () {
 	cd ${S}
-	git checkout rel_socfpga_v2019.04_19.11.02_pr
+	git checkout -b rel_socfpga_v2019.04_19.11.02_pr
 }
 
 do_patch_prepend() {
