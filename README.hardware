@@ -15,12 +15,12 @@ Table of Contents
 
 This BSP supports the following boards:
 
-  + Intel Stratix 10 SOCFPGA board: CortexA53 processor, Rev Rev A1 Board.
+  + Intel Stratix 10 SOCFPGA board: CortexA53 processor, Rev B0 Board.
 
 2. Change History
 =================
 
-  - 2019/02 (LINUXPG-189) Linux-10.19 RCPL02: Add Intel Stratix 10 SOCFPGA board support
+  - 2021/06 (LINUXPG-709) Linux-10.21 RCPL01: Add Intel Stratix 10 SOCFPGA board support
 
 3. BSP Features
 ===============
@@ -93,16 +93,16 @@ Preloader
 
 	Board:	               Intel SOCFPGA Stratix 10 Board
 	BootLoader:            U-Boot SPL
-	BootLoader Version:    U-Boot SPL 2019.04 (Nov 01 2019 - 03:11:42 +0000)
+	BootLoader Version:    U-Boot SPL 2020.10-10892-gced41867be (Mar 05 2021 - 10:29:01 +0800)
 
 Bootloader
 ----------
 
 	Processor:             Stratix 10
 	Board:	               Intel SOCFPGA Stratix 10 Board
-	Board Revision:        Rev A1 devkit
+	Board Revision:        Rev B0 devkit
 	BootLoader:            U-Boot
-	BootLoader Version:    U-Boot 2019.04 (Nov 04 2019 - 08:06:54 +0000)socfpga_stratix10
+	BootLoader Version:    U-Boot 2020.10 (Mar 09 2021 - 03:28:06 +0000)socfpga_stratix10
 
 
 

@@ -24,7 +24,7 @@ when using the Wind River setup.sh wrapper.
 
 License
 -------
-Copyright (C) 2019 Wind River Systems, Inc.
+Copyright (C) 2021 Wind River Systems, Inc.
 
 Source code included in the tree for individual recipes is under the LICENSE
 stated in the associated recipe (.bb file) unless otherwise stated.
@@ -101,12 +101,14 @@ directory.
 
 Configure u-boot with target IP, tftp server, netmask and other required
 network values.
- > tftp 0x2000000 "/<tftp root>/Image"
- > tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk.dtb"
- > setenv bootargs console=ttyS1,115200 root=/dev/nfs rw \
-          nfsroot=<nfs server>:<nfs root>,nolock \
-          ip=<target IP>::<gateway>:<netmask>::eth0:off
- > booti 0x2000000 - 0x8000000
+SOCFPGA_STRATIX10 # run fatscript
+SOCFPGA_STRATIX10 # run linux_qspi_enable
+SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
+SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk.dtb"
+SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
+			  nfsroot=<nfs server>:<nfs root>,nolock \
+			  ip=<target IP>::<gateway>:<netmask>::eth0:off
+SOCFPGA_STRATIX10 # booti 0x2000000 - 0x8000000
 
 4.2 Rootfs on MMC/SD
 --------------------
@@ -180,16 +182,16 @@ We can enable/disable fpga bridge in bootloader with command "bridge enable/disa
 There are 3 LEDs on HPS IO48 OOBE Card that is a daughter card.
 Run below command to turn on/off the 3 LEDs.
 - To turn on/off HPS_LED1(D6):
-root@stratix10swvp:~# echo 1 > /sys/class/leds/hps_led0/brightness
-root@stratix10swvp:~# echo 0 > /sys/class/leds/hps_led0/brightness
+root@intel-socfpga-64:~# echo 1 > /sys/class/leds/hps_led0/brightness
+root@intel-socfpga-64:~# echo 0 > /sys/class/leds/hps_led0/brightness
 
 - To turn on/off HPS_LED2(D8):
-root@stratix10swvp:~# echo 1 > /sys/class/leds/hps_led1/brightness
-root@stratix10swvp:~# echo 0 > /sys/class/leds/hps_led1/brightness
+root@intel-socfpga-64:~# echo 1 > /sys/class/leds/hps_led1/brightness
+root@intel-socfpga-64:~# echo 0 > /sys/class/leds/hps_led1/brightness
 
 - To turn on/off HPS_LED3(D7):
-root@stratix10swvp:~# echo 1 > /sys/class/leds/hps_led2/brightness
-root@stratix10swvp:~# echo 0 > /sys/class/leds/hps_led2/brightness
+root@intel-socfpga-64:~# echo 1 > /sys/class/leds/hps_led2/brightness
+root@intel-socfpga-64:~# echo 0 > /sys/class/leds/hps_led2/brightness
 
 
 6. Creating Partitioned Images(WIC)
@@ -200,13 +202,13 @@ partitioned image on an SD card. The wic command generates partitioned images
 from existing OpenEmbedded build artifacts.
 For more information about WIC, see:
 
-http://www.yoctoproject.org/docs/2.2/mega-manual/mega-manual.html#creating-partitioned-images
+https://www.yoctoproject.org/docs/current/mega-manual/mega-manual.html
 
 This BSP supports SD card disk images.
 After building the project, you will have a WIC image under the directory
 tmp-glibc/deploy/images/<bsp name>/, for example:
 
-tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64.wic
+tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.wic
 
 You can then write the output image to an SD card.
 
@@ -215,26 +217,12 @@ You can then write the output image to an SD card.
 
 To burn u-boot and WIC images to an SD card, you need to execute below command:
 
-# dd if=wrlinux-image-glibc-<rootfs_type>-intel-socfpga-64.wic of=/dev/your_sd_dev
+# dd if=wrlinux-image-std-intel-socfpga-64.wic of=/dev/your_sd_dev
 
-6.2 Set u-boot env
------------------
+6.2 Boot up wic image
+---------------------
 
-The board can boot automatically by setting the following uboot environment variables:
-
-mmcboot=setenv bootargs earlycon root=${mmcroot} rw rootwait;booti ${loadaddr} - ${fdt_addr}
-mmcload=mmc rescan;load mmc 0:1 ${loadaddr} ${bootfile};load mmc 0:1 ${fdt_addr} ${fdtimage}
-mmcroot=/dev/mmcblk0p2
-
-=> setenv bootfile Image
-=> setenv fdtimage socfpga_stratix10_socdk.dtb
-=> setenv fdt_addr 8000000
-=> setenv loadaddr 0x2000000
-=> setenv mmcroot /dev/mmcblk0p2
-=> setenv mmcboot 'setenv bootargs earlycon root=${mmcroot} rw rootwait;booti ${loadaddr} - ${fdt_addr}'
-=> setenv mmcload 'mmc rescan;load mmc 0:1 ${loadaddr} ${bootfile};load mmc 0:1 ${fdt_addr} ${fdtimage}'
-=> setenv bootcmd 'run mmcload; run linux_qspi_enable; run mmcboot'
-=> saveenv; run bootcmd;
+Power on board, system boots up automatically from SD card.
 
 
 7. Tickless Feature
@@ -258,6 +246,16 @@ When Tickless Feature is required, please add it by template in setup command li
 8.3 On the target, if you want to do programming again, delete the overlay first before doing step 8.2.
 	# rmdir /sys/kernel/config/device-tree/overlays/0
 
+Note1:
+User can download the pre-build FPGA image or FPGA project from below link:
+https://releases.rocketboards.org/release/2020.11/.
+About how to build FPGA project and generate ghrd.core.rbf file, please refer to below link:
+https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
+
+Note2:
+If there is any device running on FPGA side, please stop it firstly.
+
+
 9. Remote System Update
 =======================
 
@@ -265,23 +263,23 @@ Please follow below steps to run remote system update feature
 
 9.1 Install necessary tool
 --------------------------
-Please download below 2 tools from https://www.altera.com/downloads/download-center.html, linux version.
-- SoC FPGA EDS Pro Edition v19.3
-- Quartus Prime Pro Edition v19.3
+Please download below 2 tools from https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html, linux version.
+- Quartus Prime Pro Edition Programmer and Tools v20.4
+- Quartus Prime Pro Edition Software v20.4
 Note: Please apply for license for building Stratix10 *.sof file.
-      Customer also can get the pre-build *.sof file from ~/intelFPGA_pro/19.3/embedded/examples/hardware/s10_soc_devkit_ghrd/output_files
+      Customer also can get the pre-build *.sof file from https://releases.rocketboards.org/release/2020.11/.
 
 9.2 Setting up the build environment
 ------------------------------------
 Start an embedded command shell
-	# ~/intelFPGA_pro/18.0/embedded/embedded_command_shell.sh
+	# ~/intelFPGA_pro/20.4/embedded/embedded_command_shell.sh
 Create the top folder used to store all the example files
 	# rm -rf  ~/rsu_example
 	# cd ~/rsu_example
 Retrieve and setup the toolchain
-	# wget https://releases.linaro.org/components/toolchain/binaries/7.2-2017.11/aarch64-linux-gnu/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
-	# tar xf gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
-	# export PATH=`pwd`/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu/bin/:$PATH
+	# wget https://releases.linaro.org/components/toolchain/binaries/7.5-2019.12/aarch64-linux-gnu/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+	# tar xf gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+	# export PATH=`pwd`/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gn/bin/:$PATH
 Setup the environment variables used to compile Linux and LIBRSU
 	# export ARCH=arm64
 	# export CROSS_COMPILE=aarch64-linux-gnu-
@@ -289,15 +287,25 @@ Setup the environment variables used to compile Linux and LIBRSU
 9.3 Building hardware project
 -----------------------------
 Create a few images for testing: 0-factory, 1-production1, 2-production2, 3-production3
+	# <path-to-quartus>/intelFPGA_pro/20.4/nios2eds/nios2_command_shell.sh
 	# cd ~/rsu_example
 	# rm -rf hardware_designs
 	# mkdir hardware_designs
 	# cd hardware_designs
+	# git clone https://github.com/altera-opensource/ghrd-socfpga.git
+	# cd ghrd-socfpga
+	# git checkout -b ACDS-20.4pro-20.1std ACDS-20.4pro-20.1std
+	# cd ..
 	# for version in {0..3}
 	  do
 		mkdir s10_soc_devkit_ghrd.$version
 		cd s10_soc_devkit_ghrd.$version
-		tar xf $SOCEDS_DEST_ROOT/examples/hardware/s10_soc_devkit_ghrd/tgz/*.tar.gz
+		cp -r ../ghrd-socfpga/s10_soc_devkit_ghrd/* ./
+		make clean && make scrub_clean && rm -rf output_files qsys_top subsys_periph subsys_jtg_mst ip/qsys_top/ ip/subsys_jtg_mst/ ip/subsys_periph/ *.qsys *.qpf *.qsf
+		sed -i 's/0xACD5CAFE/0xABAB000'$version'/g' create_ghrd_qsys.tcl
+		make generate_from_tcl
+		make sof
+		cd ..
 	  done
 	# cd ..
 
@@ -314,7 +322,7 @@ Run below commands to obtain the u-uoot source code and build it.
 	# rm -rf u-boot-socfpga
 	# git clone https://github.com/altera-opensource/u-boot-socfpga
 	# cd u-boot-socfpga
-	# git checkout -t -b test_s10_rsu origin/socfpga_v2019.04
+	# git checkout -t -b test_s10_rsu origin/socfpga_v2020.10
 	# make clean && make mrproper
 	# make socfpga_stratix10_defconfig
 	# make -j 24
@@ -333,7 +341,7 @@ and we need to add the FSBL to them with the following commands:
 # mkdir sof_files
 # for version in {0..3}
   do
-	quartus_cpf --bootloader=u-boot-socfpga/spl/u-boot-spl-dtb.hex \
+	quartus_pfg -c -o hps_path=u-boot-socfpga/spl/u-boot-spl-dtb.hex \
 	hardware_designs/s10_soc_devkit_ghrd.$version/output_files/ghrd_1sx280lu2f50e2vg.sof sof_files/ghrd_hps.$version.sof
   done
 
@@ -472,13 +480,13 @@ The following commands is used to create the SD card image:
 	# cd ~/rsu_example
 	# sudo rm -rf sd_card
 	# mkdir sd_card && cd sd_card
-	# wget https://releases.rocketboards.org/release/2017.05/gsrd/tools/make_sdimage.py
+	# wget https://releases.rocketboards.org/release/2020.11/gsrd/tools/make_sdimage_p3.py
 	# chmod +x make_sdimage.py
 	# cp ../u-boot-socfpga/u-boot-dtb.img .
 	# cp ../linux-socfpga/arch/arm64/boot/Image .
 	# cp ../linux-socfpga/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dtb .
 	# mkdir rootfs && cd rootfs
-	# sudo tar jxf <project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-glibc-std-intel-socfpga-64-<generation time>.rootfs.tar.bz2
+	# sudo tar jxf <project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-<generation time>.rootfs.tar.bz2
 	# for version in {0..3}
 	  do
 		sudo cp ../../image_files/ghrd_hps.$version.rpd root/
@@ -488,7 +496,7 @@ The following commands is used to create the SD card image:
 	# sudo cp ../../intel-rsu/etc/qspi.rc etc/librsu.rc
 	# sudo cp ../../zlib-1.2.11/libz.so lib64/
 	# cd ..
-	# sudo ./make_sdimage.py -f \
+	# sudo ./make_sdimage_p3.py -f \
 	    -P rootfs/*,num=2,format=ext3,size=800M  \
 	    -P u-boot-dtb.img,Image,socfpga_stratix10_socdk.dtb,num=1,format=vfat,size=100M  \
 	    -s 1G  \
@@ -557,9 +565,10 @@ Note that the following items are included in the rootfs on the SD card:
 	Current Image   : 0x01000000
 	Last Fail Image : 0x00000000
 	State           : 0x00000000
-	Version         : 0x00000000
-	Error locaton   : 0x00000000
+	Version         : 0x00000202
+	Error location  : 0x00000000
 	Error details   : 0x00000000
+	Retry counter   : 0x00000000
 	RSU: Sub-partition table 0 offset 0x00910000
 	RSU: Sub-partition table 1 offset 0x00918000
 	SF: Detected mt25qu02g with page size 256 Bytes, erase size 4 KiB, total 256 MiB
@@ -576,6 +585,7 @@ Note that the following items are included in the rootfs on the SD card:
 	RSU: CMF pointer block offset 0x00920000
 	RSU: CMF pointer block's image pointer list
 	Priority 1 Offset: 0x0000000001000000 nslot: 0
+
 
 The above listing shows what we expected: that we have one factory image, and three production image slots,
 with just P1 being used, there are no errors, and the currently loaded image is P1.
@@ -631,45 +641,40 @@ The status is basically as before, just that the currently running image is now 
 
 2) Log in system using "root" as user name. The password is also "root" if required.
 
-3) Load the intel-rsu kernel driver with below command if system doesn't load it automatically.
-	# modprobe /lib/modules/<kernel version>-yocto-<kernel type>/kernel/drivers/firmware/stratix10-rsu.ko
-
-4) Display the currently loaded image and the status by looking at the sysfs files created by the driver
+3) Display the currently loaded image and the status by looking at the sysfs files created by the driver.
 	# cd /sys/devices/platform/stratix10-rsu.0
 	# cat current_image
 	0x01000000
 	# cat error_details
-	0
+	0x00000000
 	# cat error_location
-	0
+	0x00000000
 	# cat state
-	0
+	0x00000000
 	# cat version
-	0
+	0x00000202
 	# cat fail_image
-	0
+	0x00000000
 
-5) Set reloading the factory image on next time booting up
+4) Set reloading the factory image on next time booting up
 	# cd /sys/devices/platform/stratix10-rsu.0
 	# printf %i 0x0110000 > reboot_image
 
-6) reboot system
+5) reboot system
 	# reboot
 
-7) Load again the intel-rsu module if system doesn't load it automatically, and display the status
-   using the files from sysfs:
-	# modprobe /lib/modules/<kernel version>-yocto-<kernel type>/kernel/drivers/firmware/stratix10-rsu.ko
+6) Log in system, and check remote system update status from sysfs:
 	# cd /sys/devices/platform/stratix10-rsu.0
 	# cat current_image
 	0x00110000
 	# cat error_details
-	0
+	0x00000000
 	# cat error_location
-	0
+	0x00000000
 	# cat state
-	0
+	0x00000000
 	# cat fail_image
-	0
+	0x00000000
 
 9.12.3 Run RSU feature from RSU Client Application
 --------------------------------------------------
@@ -677,10 +682,7 @@ The status is basically as before, just that the currently running image is now 
 
 2) Log in system using "root" as user name. The password is also "root" if required.
 
-3) Load the intel-rsu kernel driver with below command if system doesn't load it automatically.
-	# modprobe /lib/modules/<kernel version>-yocto-<kernel type>/kernel/drivers/firmware/stratix10-rsu.ko
-
-4) Run the rsu_client without parameters, to display its help message
+3) Run the rsu_client without parameters, to display its help message
 	# rsu_client
 	--- RSU app usage ---
 	-c|--count                        get the number of slots
@@ -689,13 +691,32 @@ The status is basically as before, just that the currently running image is now 
 	-p|--priority slot_num            get the priority of the selected slot
 	-E|--enable slot_num              set the selected slot as the highest priority
 	-D|--disable slot_num             disable selected slot but to not erase it
-	-a|--add file_name [-s|--slot] slot_num  add a new app image to the selected slot, the default slot is 0 if usery
-	-e|--erase slot_num               erase app image from the selected slot
-	-v|--verify file_name [-s|--slot] slot_num  verify app image on the selected slot, the default slot is 0 if usery
-	-f|--copy file_name -s|--slot slot_num  read the data in a selected slot then write to a file
 	-r|--request slot_num             request the selected slot to be loaded after the next reboot
+	-R|--request-factory              request the factory image to be loaded after the next reboot
+	-e|--erase slot_num               erase app image from the selected slot
+	-a|--add file_name -s|--slot slot_num  add a new app image to the selected slot
+	-u|--add-factory-update file_name -s|--slot slot_num  add a new factory update image to the selected slot
+	-A|--add-raw file_name -s|--slot slot_num  add a new raw image to the selected slot
+	-v|--verify file_name -s|--slot slot_num  verify app image on the selected slot
+	-V|--verify-raw file_name -s|--slot slot_num  verify raw image on the selected slot
+	-f|--copy file_name -s|--slot slot_num  read the data in a selected slot then write to a file
 	-g|--log                          print the status log
+	-n|--notify value                 report software state
+	-C|--clear-error-status           clear errors from the log
+	-Z|--reset-retry-counter          reset current retry counter
+	-m|--display-dcmf-version         print DCMF version
+	-y|--display-dcmf-status          print DCMF status
+	-x|--display-max-retry            print max_retry parameter
+	-t|--create-slot slot_name -S|--address slot_address -L|--length slot_size  create a new slot using unallocated space
+	-d|--delete-slot slot_num         delete selected slot, freeing up allocated space
+	-W|--restore-spt file_name        restore spt from a file
+	-X|--save-spt file_name           save spt to a file
+	-b|--create-empty-cpb             create a empty cpb
+	-B|--restore-cpb file_name        restore cpb from a file
+	-P|--save-cpb file_name           save cpb to a file
+	-k|--check-running-factory        check if currently running the factory image
 	-h|--help                         show usage message
+
 
 5) Run rsu client commands that display information about the slots
 	# rsu_client --count
@@ -762,10 +783,9 @@ The status is basically as before, just that the currently running image is now 
 	  PRIORITY: 2
 	Operation completed
 
-9) Power cycle the board, boot Linux, load the RSU module if system doesn't load it automatically.
-   And then display the status, it will show the P2 image running, as expected:
-	# modprobe /lib/modules/<kernel version>-yocto-<kernel type>/kernel/drivers/firmware/stratix10-rsu.ko
-	root@stratix10:~# rsu_client --log
+9) Power cycle the board, boot system. And then display the status,
+   it will show the P2 image running, as expected:
+	# rsu_client --log
 	      VERSION: 0x00000000
 		STATE: 0x00000000
 	CURRENT IMAGE: 0x0000000002000000
@@ -781,8 +801,7 @@ The status is basically as before, just that the currently running image is now 
 11) reboot system.
 	# reboot
 
-12) Log in Linux, load the RSU module if system doesn't load it automatically.
-    And then display the RSU status:
+12) Log in system, And then display the RSU status:
 	# rsu_client --log
 	      VERSION: 0x00000000
 		STATE: 0x00000000
@@ -803,7 +822,6 @@ Please refer to below link:
 https://rocketboards.org/foswiki/Documentation/S10GSRDEnableHPS_DDR_ECC
 
 If ECC feature is enabled, when board boots up, there is below output information.
-SDRAM: Initializing ECC 0x00000000 - 0x80000000
 SDRAM-ECC: Initialized success with 1343 ms
 
 10.2 Verify ECC feature
@@ -817,17 +835,15 @@ Check whether ECC feature take effect, please follow below steps.
 2) Boot up system and then login.
 
 3) Check the error count
-	# cat /sys/devices/system/edac/mc/mc0/ce_count
+	# cat /sys/devices/system/edac/sdramedac/sdramedac0/ce_count
 	0 (It should be zero)
 
 4) Inject error
-	#echo "C" > /sys/kernel/debug/edac/mc0/altr_trigger
-	EDAC MC: Inject Single bit error
-	EDAC MC0: 1 CE soc:eccmgr:sdramedac on mc#0csrow#0channel#0 (csrow:0 channel:0 page:0x0 offset:0x0 grain:8 syndrome:0x0)
-	EDAC MC: Read Data [0x5A5A5A5A, 0xA5A5A5A5]
+	#echo "C" > ./kernel/debug/edac/sdramedac/altr_trigger
+	EDAC DEVICE0: CE: Altera ECC Manager instance: sdramedac0 block: sdramedac0 count: 1 'sdramedac'
 
 5) Check the error count again
-	# cat /sys/devices/system/edac/mc/mc0/ce_count
+	# cat /sys/devices/system/edac/sdramedac/sdramedac0/ce_count
 	1 (It should be incremented by 1)
 
 11. kexec/kdump
@@ -889,21 +905,21 @@ Build Image
 	# bitbake wrlinux-image-std
 
 Get FPGA image with PCIe feature from below below:
-https://releases.rocketboards.org/release/2019.04/pcierd/s10_pcie/ghrd_1sx280lu2f50e2vg_hps.sof
+https://releases.rocketboards.org/release/2020.11/pcie/s10_pcie_gen3x8/
 
-program sof file into board with Quartus programmer tool, and then run below command before
-booting up system. These commands is used to enable bridge between HPS and FPGA
+Generate sof file and program it into board with Quartus programmer tool,
+and then run below commands to boot up system.
 
-	SOCFPGA_STRATIX10 # bridge enable
-	SOCFPGA_STRATIX10 # mw ffd24800 60000000
-	SOCFPGA_STRATIX10 # mw F70105a0 0
-	SOCFPGA_STRATIX10 # mw F70105c0 0
-	SOCFPGA_STRATIX10 # mw F70105e0 0
-	SOCFPGA_STRATIX10 # mw F7010600 0
-	SOCFPGA_STRATIX10 # mw F7010620 0
-	SOCFPGA_STRATIX10 # mw F7010640 0
+	SOCFPGA_STRATIX10 # run fatscript
+	SOCFPGA_STRATIX10 # run linux_qspi_enable
+	SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
+	SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk_pcie.dtb"
+	SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
+				  nfsroot=<nfs server>:<nfs root>,nolock \
+				  ip=<target IP>::<gateway>:<netmask>::eth0:off
+	SOCFPGA_STRATIX10 # booti 0x2000000 - 0x8000000
 
-Execute the following commands after system boots up to verify PCIe interface:
+After system boots up, execute the following commands to verify PCIe interface:
 
 	# ifconfig
 	# dhclient eth1
