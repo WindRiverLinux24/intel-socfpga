@@ -1,0 +1,11 @@
+setexpr.b reg *0xFFD120DC;
+if itest $reg -eq 3;
+then bridge enable;
+else load mmc 0:1 $loadaddr ghrd.core.rbf; dcache flush;
+if itest $filesize -ne 0;
+then fpga load 0 $loadaddr $filesize; bridge enable;
+else
+setenv loop_count 1 2 3
+for i in ${loop_count}; do echo The FPGA image is a NULL file, Please copy correct FPGA image into boot partition!; sleep 1; done
+fi
+fi
