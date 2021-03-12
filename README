@@ -224,6 +224,13 @@ To burn u-boot and WIC images to an SD card, you need to execute below command:
 
 Power on board, system boots up automatically from SD card.
 
+Note:
+There are 2 kinds of bootloader in the boot partition, u-boot.img and u-boot.itb.
+u-boot.img: It is created only based on u-boot code.
+u-boot.itb: It is created by combining u-boot with atf.
+Use different bootloader, it is need to merge separate u-boot-spl-dtb.hex file into
+FPGA image *.sof file. Detailed steps, please refer to below link:
+https://www.intel.com/content/www/us/en/programmable/documentation/kqx1502122862454.html#okg1521034720194
 
 7. Tickless Feature
 ===================
