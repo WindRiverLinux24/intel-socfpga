@@ -55,7 +55,8 @@ the corresponding h/w features exist.
   o Misc Devices
     + UART: Two DesignWare controllers, based on an industry standard 16550
                  Synopsys DesignWare APB Universal Asynchronous Receiver/Transmitter (DW_apb_uart) peripheral
-    + GPIO: Synopsys DesignWare APB General Purpose Programming I/O (DW_apb_gpio) peripheral
+    + GPIO(HPS): Synopsys DesignWare APB General Purpose Programming I/O (DW_apb_gpio) peripheral
+    + GPIO(FPGA): FPGA SW3, FPGA button and FPGA led
     + QSPI: Quad-SPI flash controller based on Cadence Quad SPI controller
     + RTC: DS1339 based on I2C
     + DMA: On-Chip ARM Corelink DMA Controller (DMA-330)

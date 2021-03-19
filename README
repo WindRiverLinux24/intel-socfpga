@@ -979,3 +979,116 @@ After system boots up, execute the following commands to verify PCIe interface:
 	# ping <ip address> -i eth2 -c 5
 
 Note: When run FPGA SGMII ethernet feature, please use socfpga_stratix10_socdk_sgmii.dtb file.
+
+
+14. FPGA GPIO
+=============
+
+14.1 FPGA GPIO Introduction
+---------------------------
+
+FPGA GPIO feature is implemented in GHRD(golden hardware reference design) FPGA image.
+User can download the pre-build FPGA image or FPGA project from below link:
+https://releases.rocketboards.org/release/2020.11/.
+
+About how to build FPGA project and apply the FPGA image, please refer to below links:
+https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
+https://www.intel.com/content/www/us/en/programmable/documentation/kqx1502122862454.html
+
+14.2 FPGA GPIO Verification
+---------------------------
+
+There are 4 User FPGA DIPSWs on stratix10 board from SW3.1 to SW3.4, they are all in off status by default.
+There are 4 User FPGA BUTTONs on stratix10 board from S4 to S7.
+There are 4 User FPGA LEDs on stratix10 board from LED0 to LED3, but the LED3 is already used by GHRD FPGA image.
+
+Build Image
+
+	# bitbake wrlinux-image-std
+
+Power on board, program FPGA image into flash with Quartus programmer tool,
+and then run below commands to boot up system.
+
+	SOCFPGA_STRATIX10 # run fatscript
+	SOCFPGA_STRATIX10 # run linux_qspi_enable
+	SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
+	SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk_ghrd.dtb"
+	SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
+				  nfsroot=<nfs server>:<nfs root>,nolock \
+				  ip=<target IP>::<gateway>:<netmask>::eth0:off
+	SOCFPGA_STRATIX10 # booti 0x2000000 - 0x8000000
+
+After system boots up, verify FPGA GPIO feature with below sections.
+
+14.2.1 FPGA DIPSW
+-----------------
+
+Determine the GPIO numbers for the DIPSWs with below command
+
+	# grep -r "gpio@1070" /sys/class/gpio/gpiochip*/label
+	/sys/class/gpio/gpiochip416/label:/soc/gpio@1070
+	This means that the GPIOs 416...419 are allocated to the DIPSWs.
+
+Get DIPSWs value
+
+	# echo 416 > /sys/class/gpio/export
+	# echo in > gpio416/direction
+	# cat /sys/class/gpio/gpio416/value
+	1
+	set SW3.1 as on status
+	# cat /sys/class/gpio/gpio416/value
+	0
+
+User also can test SW3.2~SW3.4 with above
+
+14.2.2 FPGA BUTTON
+------------------
+
+Determine the GPIO numbers for the BUTTONs with below command
+
+	# grep -r "gpio@1060" /sys/class/gpio/gpiochip*/label
+	/sys/class/gpio/gpiochip448/label:/soc/gpio@1060
+	This means that the GPIOs 448...451 are allocated to the push BUTTONs.
+
+Get BUTTONs value
+
+	# echo 448 > /sys/class/gpio/export
+	# echo in > gpio448/direction
+	# cat /sys/class/gpio/gpio448/value
+	1
+	keep S4 as push down status while read the value of gpio448
+	# cat /sys/class/gpio/gpio448/value
+	0
+
+User also can test S5~S7 with above
+
+14.2.3 FPGA LED
+---------------
+
+Run below command to turn on/off the FPGA LEDs.
+- To turn on/off FPGA_LED0(D21):
+	# echo 1 > /sys/class/leds/fpga_led0/brightness
+	# echo 0 > /sys/class/leds/fpga_led0/brightness
+
+- To turn on/off FPGA_LED1(D23):
+	# echo 1 > /sys/class/leds/fpga_led1/brightness
+	# echo 0 > /sys/class/leds/fpga_led1/brightness
+
+- To turn on/off FPGA_LED2(D25):
+	# echo 1 > /sys/class/leds/fpga_led2/brightness
+	# echo 0 > /sys/class/leds/fpga_led2/brightness
+
+Run below command to start/stop blinking FPGA LEDs.
+- To start/stop blinking FPGA_LED0(D21):
+	# echo timer > /sys/class/leds/fpga_led0/trigger
+	# echo none > /sys/class/leds/fpga_led0/trigger
+
+- To start/stop blinking FPGA_LED1(D23):
+	# echo timer > /sys/class/leds/fpga_led1/brightness
+	# echo none > /sys/class/leds/fpga_led1/brightness
+
+- To start/stop blinking FPGA_LED2(D25):
+	# echo timer > /sys/class/leds/fpga_led2/brightness
+	# echo none > /sys/class/leds/fpga_led2/brightness
+
+Note: When run FPGA GPIO feature, please use socfpga_stratix10_socdk_ghrd.dtb file.
