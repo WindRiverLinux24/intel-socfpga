@@ -42,6 +42,7 @@ the corresponding h/w features exist.
   o Network
     + Ethernet: Three 10/100/1000 Ethernet media access controls (MAC) with integrated DMA
                       The EMACs are instances of the SynopsysDesignWare Universal Ethernet MAC
+		Two SGMII RJ45 ethernet ports based on FPGA hardware design
 
   o USB
     + Two USB On-the-Go (OTG) controllers with DMA.
@@ -73,7 +74,6 @@ the corresponding h/w features exist.
 The following features are not supported and validated:
 
     x HSMC interface
-    x Two RJ45 ethernet ports from FPGA
     x NAND: CadenceDesign IP NAND Flash Memory Controller(There is no FPGA design supporting it)
 
 4. BSP Notes

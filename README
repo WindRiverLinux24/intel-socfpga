@@ -891,7 +891,7 @@ direct memory access (DMA) interfaces.
 
 Detail description, please refer to https://rocketboards.org/foswiki/Projects/Stratix10PCIeRootPortWithMSI
 
-12.1 PCIe Verification
+12.2 PCIe Verification
 ----------------------
 
 There is a PCIe port on stratix10 board J35.
@@ -933,3 +933,49 @@ After system boots up, execute the following commands to verify PCIe interface:
 	# ping <ip address> -i eth1 -c 5
 
 Note: When run PCIe feature, please use socfpga_stratix10_socdk_pcie.dtb file.
+
+
+13. FPGA SGMII Ethernet
+=======================
+
+13.1 SGMII Ethernet Introduction
+--------------------------------
+
+SGMII Ethernet feature is implemented in FPGA side.
+User can download the pre-build FPGA image or FPGA project from below link:
+https://releases.rocketboards.org/release/2020.11/.
+
+About how to build FPGA project and apply the FPGA image, please refer to below links:
+https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
+https://www.intel.com/content/www/us/en/programmable/documentation/kqx1502122862454.html
+
+13.2 SGMII Ethernet Verification
+--------------------------------
+
+There are 2 SGMII ethernet ports on stratix10 board J3 and J4. Connect them to a switch.
+
+Build Image
+
+	# bitbake wrlinux-image-std
+
+Power on board, program FPGA image into flash with Quartus programmer tool,
+and then run below commands to boot up system.
+
+	SOCFPGA_STRATIX10 # run fatscript
+	SOCFPGA_STRATIX10 # run linux_qspi_enable
+	SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
+	SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk_sgmii.dtb"
+	SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
+				  nfsroot=<nfs server>:<nfs root>,nolock \
+				  ip=<target IP>::<gateway>:<netmask>::eth0:off
+	SOCFPGA_STRATIX10 # booti 0x2000000 - 0x8000000
+
+After system boots up, execute the following commands to verify PCIe interface:
+
+	# ifconfig -a
+	# dhcpcd eth1
+	# dhcpcd eth2
+	# ping <ip address> -i eth1 -c 5
+	# ping <ip address> -i eth2 -c 5
+
+Note: When run FPGA SGMII ethernet feature, please use socfpga_stratix10_socdk_sgmii.dtb file.
