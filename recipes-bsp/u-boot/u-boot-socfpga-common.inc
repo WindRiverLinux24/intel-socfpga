@@ -29,3 +29,5 @@ UBOOT_CONFIG[stratix10-socdk] = "socfpga_stratix10_defconfig"
 UBOOT_CONFIG[stratix10-socdk-atf] = "socfpga_stratix10_atf_defconfig"
 UBOOT_CONFIG[stratix10-socdk-qspi] = "socfpga_stratix10_qspi_defconfig"
 UBOOT_CONFIG[stratix10-socdk-qspi-atf] = "socfpga_stratix10_qspi_atf_defconfig"
+
+COMPATIBLE_MACHINE ?= "intel-socfpga-64"
