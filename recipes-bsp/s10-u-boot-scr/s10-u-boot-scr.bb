@@ -25,4 +25,4 @@ do_deploy() {
 addtask do_deploy after do_compile before do_build
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "intel-socfpga"
+COMPATIBLE_MACHINE = "intel-socfpga-64"
