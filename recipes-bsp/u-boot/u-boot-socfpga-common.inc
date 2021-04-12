@@ -23,7 +23,9 @@ B = "${WORKDIR}/build"
 
 RPROVIDES_${PN} += "u-boot"
 
-SRC_URI = "${UBOOT_REPO};protocol=${UBOOT_PROT};branch=${UBOOT_BRANCH}"
+SRC_URI = "${UBOOT_REPO};protocol=${UBOOT_PROT};branch=${UBOOT_BRANCH} \
+    file://0001-Update-settings-for-ostree.patch \
+"
 
 UBOOT_CONFIG[stratix10-socdk] = "socfpga_stratix10_defconfig"
 UBOOT_CONFIG[stratix10-socdk-atf] = "socfpga_stratix10_atf_defconfig"
