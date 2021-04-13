@@ -846,7 +846,7 @@ Check whether ECC feature take effect, please follow below steps.
 	0 (It should be zero)
 
 4) Inject error
-	#echo "C" > ./kernel/debug/edac/sdramedac/altr_trigger
+	# echo "C" > /sys/kernel/debug/edac/sdramedac/altr_trigger
 	EDAC DEVICE0: CE: Altera ECC Manager instance: sdramedac0 block: sdramedac0 count: 1 'sdramedac'
 
 5) Check the error count again
