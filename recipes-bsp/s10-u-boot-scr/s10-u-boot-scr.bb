@@ -18,7 +18,12 @@ inherit deploy nopackages
 
 do_deploy() {
 	install -d ${DEPLOYDIR}
-	install -m 0644 u-boot.scr ${DEPLOYDIR}
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'ostree', 'true', 'false', d)}; then
+		# The u-boot.scr is not used when ostree is enabled
+		install -m 0644 u-boot.scr ${DEPLOYDIR}
+	else
+		install -m 0644 u-boot.scr ${DEPLOYDIR}/boot.scr
+	fi
 	install -m 0644 "${WORKDIR}/ghrd.core.rbf" ${DEPLOYDIR}
 }
 
