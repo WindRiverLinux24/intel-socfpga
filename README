@@ -930,7 +930,7 @@ After system boots up, execute the following commands to verify PCIe interface:
 
 	# ifconfig
 	# dhclient eth1
-	# ping <ip address> -i eth1 -c 5
+	# ping <ip address> -I eth1 -c 5
 
 Note: When run PCIe feature, please use socfpga_stratix10_socdk_pcie.dtb file.
 
@@ -975,8 +975,8 @@ After system boots up, execute the following commands to verify PCIe interface:
 	# ifconfig -a
 	# dhcpcd eth1
 	# dhcpcd eth2
-	# ping <ip address> -i eth1 -c 5
-	# ping <ip address> -i eth2 -c 5
+	# ping <ip address> -I eth1 -c 5
+	# ping <ip address> -I eth2 -c 5
 
 Note: When run FPGA SGMII ethernet feature, please use socfpga_stratix10_socdk_sgmii.dtb file.
 
