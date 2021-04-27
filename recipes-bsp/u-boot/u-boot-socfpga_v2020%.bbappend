@@ -8,6 +8,7 @@ SRC_URI_append_intel-socfpga-64 = " \
 	file://0001-driver-watchdog-reset-watchdog-in-designware_wdt_sto.patch \
 	file://0001-driver-watchdog-enable-wdt-command-by-default.patch \
 	file://0001-Update-settings-for-ostree.patch \
+	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
 "
 
 inherit deploy
