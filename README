@@ -102,9 +102,9 @@ directory.
 Configure u-boot with target IP, tftp server, netmask and other required
 network values.
 SOCFPGA_STRATIX10 # run fatscript
-SOCFPGA_STRATIX10 # run linux_qspi_enable
 SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
 SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk.dtb"
+SOCFPGA_STRATIX10 # run linux_qspi_enable
 SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 			  nfsroot=<nfs server>:<nfs root>,nolock \
 			  ip=<target IP>::<gateway>:<netmask>::eth0:off
@@ -918,9 +918,9 @@ Generate sof file and program it into board with Quartus programmer tool,
 and then run below commands to boot up system.
 
 	SOCFPGA_STRATIX10 # run fatscript
-	SOCFPGA_STRATIX10 # run linux_qspi_enable
 	SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
 	SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk_pcie.dtb"
+	SOCFPGA_STRATIX10 # run linux_qspi_enable
 	SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 				  nfsroot=<nfs server>:<nfs root>,nolock \
 				  ip=<target IP>::<gateway>:<netmask>::eth0:off
@@ -962,9 +962,9 @@ Power on board, program FPGA image into flash with Quartus programmer tool,
 and then run below commands to boot up system.
 
 	SOCFPGA_STRATIX10 # run fatscript
-	SOCFPGA_STRATIX10 # run linux_qspi_enable
 	SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
 	SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk_sgmii.dtb"
+	SOCFPGA_STRATIX10 # run linux_qspi_enable
 	SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 				  nfsroot=<nfs server>:<nfs root>,nolock \
 				  ip=<target IP>::<gateway>:<netmask>::eth0:off
@@ -1010,9 +1010,9 @@ Power on board, program FPGA image into flash with Quartus programmer tool,
 and then run below commands to boot up system.
 
 	SOCFPGA_STRATIX10 # run fatscript
-	SOCFPGA_STRATIX10 # run linux_qspi_enable
 	SOCFPGA_STRATIX10 # tftp 0x2000000 "/<tftp root>/Image"
 	SOCFPGA_STRATIX10 # tftp 0x8000000 "/<tftp root>/socfpga_stratix10_socdk_ghrd.dtb"
+	SOCFPGA_STRATIX10 # run linux_qspi_enable
 	SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 				  nfsroot=<nfs server>:<nfs root>,nolock \
 				  ip=<target IP>::<gateway>:<netmask>::eth0:off
