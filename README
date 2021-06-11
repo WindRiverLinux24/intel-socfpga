@@ -255,7 +255,7 @@ When Tickless Feature is required, please add it by template in setup command li
 
 Note1:
 User can download the pre-build FPGA image or FPGA project from below link:
-https://releases.rocketboards.org/release/2020.11/.
+https://releases.rocketboards.org/release/2021.04/.
 About how to build FPGA project and generate ghrd.core.rbf file, please refer to below link:
 https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
 
@@ -274,7 +274,7 @@ Please download below 2 tools from https://www.intel.com/content/www/us/en/progr
 - Quartus Prime Pro Edition Programmer and Tools v20.4
 - Quartus Prime Pro Edition Software v20.4
 Note: Please apply for license for building Stratix10 *.sof file.
-      Customer also can get the pre-build *.sof file from https://releases.rocketboards.org/release/2020.11/.
+      Customer also can get the pre-build *.sof file from https://releases.rocketboards.org/release/2021.04/.
 
 9.2 Setting up the build environment
 ------------------------------------
@@ -487,7 +487,7 @@ The following commands is used to create the SD card image:
 	# cd ~/rsu_example
 	# sudo rm -rf sd_card
 	# mkdir sd_card && cd sd_card
-	# wget https://releases.rocketboards.org/release/2020.11/gsrd/tools/make_sdimage_p3.py
+	# wget https://releases.rocketboards.org/release/2021.04/gsrd/tools/make_sdimage_p3.py
 	# chmod +x make_sdimage.py
 	# cp ../u-boot-socfpga/u-boot-dtb.img .
 	# cp ../linux-socfpga/arch/arm64/boot/Image .
@@ -912,7 +912,7 @@ Build Image
 	# bitbake wrlinux-image-std
 
 Get FPGA image with PCIe feature from below below:
-https://releases.rocketboards.org/release/2020.11/pcie/s10_pcie_gen3x8/
+https://releases.rocketboards.org/release/2021.04/pcie/s10_pcie_gen3x8/
 
 Generate sof file and program it into board with Quartus programmer tool,
 and then run below commands to boot up system.
@@ -943,7 +943,7 @@ Note: When run PCIe feature, please use socfpga_stratix10_socdk_pcie.dtb file.
 
 SGMII Ethernet feature is implemented in FPGA side.
 User can download the pre-build FPGA image or FPGA project from below link:
-https://releases.rocketboards.org/release/2020.11/.
+https://releases.rocketboards.org/release/2021.04/.
 
 About how to build FPGA project and apply the FPGA image, please refer to below links:
 https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
@@ -989,7 +989,7 @@ Note: When run FPGA SGMII ethernet feature, please use socfpga_stratix10_socdk_s
 
 FPGA GPIO feature is implemented in GHRD(golden hardware reference design) FPGA image.
 User can download the pre-build FPGA image or FPGA project from below link:
-https://releases.rocketboards.org/release/2020.11/.
+https://releases.rocketboards.org/release/2021.04/.
 
 About how to build FPGA project and apply the FPGA image, please refer to below links:
 https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
