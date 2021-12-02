@@ -1,13 +1,14 @@
-From de4614a90bd347899de13b9c1b3e1538d6b0ea18 Mon Sep 17 00:00:00 2001
+From 91d3e4e3763177faa8e7e3de422b554727d3db65 Mon Sep 17 00:00:00 2001
 From: Robert Yang <liezhi.yang@windriver.com>
-Date: Mon, 12 Apr 2021 11:02:44 +0000
+Date: Thu, 2 Dec 2021 15:44:48 +0800
 Subject: [PATCH] Update settings for ostree
 
 These settings are required by ostree's boot.scr.
 
-Upstream-Status: Pending
-
 Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
+
+Upstream-Status: Inappropriate [WRLinux specific]
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
 ---
  configs/socfpga_stratix10_atf_defconfig | 3 +++
  configs/socfpga_stratix10_defconfig     | 3 +++
@@ -15,48 +16,54 @@ Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
  3 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/configs/socfpga_stratix10_atf_defconfig b/configs/socfpga_stratix10_atf_defconfig
-index 0bbea6f46a..55c33451f5 100644
+index 5946e31045..23db799d03 100644
 --- a/configs/socfpga_stratix10_atf_defconfig
 +++ b/configs/socfpga_stratix10_atf_defconfig
-@@ -73,3 +73,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
- CONFIG_WDT=y
- # CONFIG_SPL_USE_TINY_PRINTF is not set
- CONFIG_PANIC_HANG=y
+@@ -43,6 +43,9 @@ CONFIG_CMD_CACHE=y
+ CONFIG_CMD_EXT4=y
+ CONFIG_CMD_FAT=y
+ CONFIG_CMD_FS_GENERIC=y
 +CONFIG_FAT_WRITE=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
+ CONFIG_ENV_IS_IN_MMC=y
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_NET_RANDOM_ETHADDR=y
 diff --git a/configs/socfpga_stratix10_defconfig b/configs/socfpga_stratix10_defconfig
-index 02d4ac0dae..08aaa8d53f 100644
+index 197fad6266..777564915e 100644
 --- a/configs/socfpga_stratix10_defconfig
 +++ b/configs/socfpga_stratix10_defconfig
-@@ -73,3 +73,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
- CONFIG_WDT=y
- # CONFIG_SPL_USE_TINY_PRINTF is not set
- CONFIG_PANIC_HANG=y
+@@ -43,6 +43,9 @@ CONFIG_CMD_EXT4=y
+ CONFIG_CMD_FAT=y
+ CONFIG_CMD_FS_GENERIC=y
+ CONFIG_CMD_WDT=y
 +CONFIG_FAT_WRITE=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
+ CONFIG_MTDIDS_DEFAULT="nor0=ff705000.spi.0"
+ CONFIG_ENV_IS_IN_MMC=y
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
 diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
-index 3d468678a6..94796d5434 100644
+index 63d813bf3b..34b8506767 100644
 --- a/include/configs/socfpga_soc64_common.h
 +++ b/include/configs/socfpga_soc64_common.h
-@@ -120,6 +120,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+@@ -123,6 +123,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  	"bootfile=" CONFIG_BOOTFILE "\0" \
  	"fdt_addr=8000000\0" \
  	"fdtimage=" CONFIG_DEFAULT_DEVICE_TREE ".dtb\0" \
 +	"initrd_addr=0x05000000\0" \
  	"mmcroot=/dev/mmcblk0p2\0" \
- 	"mmcvabboot=setenv bootargs " CONFIG_BOOTARGS \
+ 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
  		" root=${mmcroot} rw rootwait;" \
-@@ -143,7 +144,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+@@ -146,7 +147,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  		" else fdt set /soc/clkmgr/clocks/qspi_clk clock-frequency" \
  		" ${qspi_clock}; fi; fi\0" \
  	"scriptaddr=0x02100000\0" \
 -	"scriptfile=u-boot.scr\0" \
 +	"scriptfile=boot.scr\0" \
  	"fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};" \
- 		   "then source ${scriptaddr}; fi\0" \
+ 		   "then source ${scriptaddr}:script; fi\0" \
  	"nandroot=/dev/mtdblock5\0" \
 -- 
-2.29.2
+2.27.0
 
