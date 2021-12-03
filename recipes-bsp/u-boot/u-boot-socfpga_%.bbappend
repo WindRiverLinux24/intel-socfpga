@@ -5,6 +5,7 @@ DEPENDS_append_intel-socfpga-64 = " arm-trusted-firmware bash"
 DEPENDS_append_intel-socfpga-64 = " s10-u-boot-scr"
 
 SRC_URI_intel-socfpga-64 = "${UBOOT_REPO};protocol=${UBOOT_PROT};nobranch=1"
+SRCREV_intel-socfpga-64 = "584a2391639d89cff6476bbfbdf7d9c666970661"
 
 SRC_URI_append_intel-socfpga-64 = " \
 	file://0001-driver-watchdog-reset-watchdog-in-designware_wdt_sto.patch \
