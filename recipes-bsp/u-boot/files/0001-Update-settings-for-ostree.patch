@@ -1,35 +1,25 @@
-From de4614a90bd347899de13b9c1b3e1538d6b0ea18 Mon Sep 17 00:00:00 2001
-From: Robert Yang <liezhi.yang@windriver.com>
-Date: Mon, 12 Apr 2021 11:02:44 +0000
+From 48d5d99789965c4ed0ee08eab8f7339925096527 Mon Sep 17 00:00:00 2001
+From: Meng Li <Meng.Li@windriver.com>
+Date: Mon, 13 Dec 2021 13:33:48 +0800
 Subject: [PATCH] Update settings for ostree
 
 These settings are required by ostree's boot.scr.
 
-Upstream-Status: Pending
-
 Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
----
- configs/socfpga_stratix10_atf_defconfig | 3 +++
- configs/socfpga_stratix10_defconfig     | 3 +++
- include/configs/socfpga_soc64_common.h  | 3 ++-
- 3 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/configs/socfpga_stratix10_atf_defconfig b/configs/socfpga_stratix10_atf_defconfig
-index 0bbea6f46a..55c33451f5 100644
---- a/configs/socfpga_stratix10_atf_defconfig
-+++ b/configs/socfpga_stratix10_atf_defconfig
-@@ -73,3 +73,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
- CONFIG_WDT=y
- # CONFIG_SPL_USE_TINY_PRINTF is not set
- CONFIG_PANIC_HANG=y
-+CONFIG_FAT_WRITE=y
-+CONFIG_MENU=y
-+CONFIG_CMD_BOOTMENU=y
+Upstream-Status: Inappropriate [WRLinux specific]
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ configs/socfpga_stratix10_defconfig    | 5 ++++-
+ include/configs/socfpga_soc64_common.h | 3 ++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
 diff --git a/configs/socfpga_stratix10_defconfig b/configs/socfpga_stratix10_defconfig
-index 02d4ac0dae..08aaa8d53f 100644
+index a63cfeaa44..ea6688b841 100644
 --- a/configs/socfpga_stratix10_defconfig
 +++ b/configs/socfpga_stratix10_defconfig
-@@ -73,3 +73,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
+@@ -97,3 +97,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
  CONFIG_WDT=y
  # CONFIG_SPL_USE_TINY_PRINTF is not set
  CONFIG_PANIC_HANG=y
@@ -37,26 +27,30 @@ index 02d4ac0dae..08aaa8d53f 100644
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
 diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
-index 3d468678a6..94796d5434 100644
+index 1174dc3bdc..47262fabd5 100644
 --- a/include/configs/socfpga_soc64_common.h
 +++ b/include/configs/socfpga_soc64_common.h
-@@ -120,6 +120,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
- 	"bootfile=" CONFIG_BOOTFILE "\0" \
+@@ -198,9 +198,10 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+ 	"qspifitboot=setenv bootargs earlycon root=/dev/mtdblock1 rw " \
+ 		"rootfstype=jffs2 rootwait;bootm ${loadaddr}\0" \
+ 	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
+-	"bootfile=" CONFIG_BOOTFILE "\0" \
++	"bootfile=Image\0" \
  	"fdt_addr=8000000\0" \
  	"fdtimage=" CONFIG_DEFAULT_DEVICE_TREE ".dtb\0" \
 +	"initrd_addr=0x05000000\0" \
  	"mmcroot=/dev/mmcblk0p2\0" \
- 	"mmcvabboot=setenv bootargs " CONFIG_BOOTARGS \
+ 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
  		" root=${mmcroot} rw rootwait;" \
-@@ -143,7 +144,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+@@ -224,7 +225,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  		" else fdt set /soc/clkmgr/clocks/qspi_clk clock-frequency" \
  		" ${qspi_clock}; fi; fi\0" \
  	"scriptaddr=0x02100000\0" \
 -	"scriptfile=u-boot.scr\0" \
 +	"scriptfile=boot.scr\0" \
  	"fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};" \
- 		   "then source ${scriptaddr}; fi\0" \
- 	"nandroot=/dev/mtdblock5\0" \
+ 		   "then source ${scriptaddr}:script; fi\0" \
+ 	"nandroot=ubi0:rootfs\0" \
 -- 
-2.29.2
+2.17.1
 
