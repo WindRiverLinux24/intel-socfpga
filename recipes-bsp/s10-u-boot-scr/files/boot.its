@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2019 Intel Corporation
+ *
+ */
+
+/dts-v1/;
+
+/ {
+	description = "U-Boot script";
+
+	images {
+		script {
+			description = "FIT format of U-Boot script";
+			type = "script";
+			arch = "arm64";
+			compression = "none";
+			data = /incbin/("boot.txt");
+
+			hash {
+				algo = "crc32";
+			};
+		};
+	};
+};

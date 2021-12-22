@@ -2,16 +2,21 @@ SUMMARY = "U-boot boot scripts for stratix10"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS = "u-boot-mkimage-native"
+DEPENDS = "u-boot-mkimage-native dtc-native"
 
 INHIBIT_DEFAULT_DEPS = "1"
 
 SRC_URI = "file://boot.txt \
 	file://ghrd.core.rbf \
+	${@bb.utils.contains('PREFERRED_VERSION_u-boot-socfpga', 'v2020.10%', '', 'file://boot.its', d)} \
 	"
 
 do_compile() {
-    mkimage -A arm -T script -C none -n "Boot script" -d "${WORKDIR}/boot.txt" u-boot.scr
+	if ${@bb.utils.contains("PREFERRED_VERSION_u-boot-socfpga", "v2020.10%", "true", "false", d)}; then
+		mkimage -A arm -T script -C none -n "Boot script" -d "${WORKDIR}/boot.txt" u-boot.scr
+	else
+		mkimage -f ${WORKDIR}/boot.its u-boot.scr
+	fi
 }
 
 inherit deploy nopackages
