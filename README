@@ -1090,3 +1090,18 @@ Run below command to start/stop blinking FPGA LEDs.
 	# echo none > /sys/class/leds/fpga_led2/brightness
 
 Note: When run FPGA GPIO feature, please use socfpga_stratix10_socdk_ghrd.dtb file.
+
+
+15. Bootloader
+==============
+
+Now, there are 2 kinds of bootloader mode supported on aarch 64 socfpga platform.
+Legacy mode: spl+u-boot, bootrom loads spl, and then spl loads u-boot.
+ATF mode: spl+atf+u-boot, bootrom loads spl, and then spl loads bl31, and then bl31 loads u-boot.
+
+Intel recommends customer to use the ATF mode for common aarch64 platform.
+So, upgrade u-boot to v2021.07 and use ATF mode by default.
+
+About the old u-boot v2020.10, it is still preserved for current customer who doesn't want to
+upgrade their bootload version. To use the u-boot v2020.10, please add below content in local.conf.
+PREFERRED_VERSION_u-boot-socfpga ?= "v2020.10%"

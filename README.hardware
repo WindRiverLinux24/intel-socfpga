@@ -83,8 +83,8 @@ The following features are not supported and validated:
 4.1 Stratix 10 SOCFPGA
 ======================
 
-4.1.1 Validated Board Info
---------------------------
+4.1.1 Validated Board Info(bootloader v2020.10)
+-----------------------------------------------
 
 This BSP is only validated in the following environment. If you use this
 BSP in a different environment it maybe have some issues.
@@ -105,8 +105,36 @@ Bootloader
 	BootLoader:            U-Boot
 	BootLoader Version:    U-Boot 2020.10 (Mar 09 2021 - 03:28:06 +0000)socfpga_stratix10
 
+4.1.2 Validated Board Info(bootloader v2021.07)
+-----------------------------------------------
 
+This BSP is only validated in the following environment. If you use this
+BSP in a different environment it maybe have some issues.
 
-4.1.2 Known hardware Issues
+Preloader
+----------
+
+	Board:	               Intel SOCFPGA Stratix 10 Board
+	BootLoader:            U-Boot SPL
+	BootLoader Version:    U-Boot SPL 2021.07 (Dec 16 2021 - 07:34:54 +0000)
+
+Arm Trust Firmware
+------------------
+
+	Board:	               Intel SOCFPGA Stratix 10 Board
+	BootLoader: 	       BL31
+	BootLoader Version:    v2.4.1(release):rel_socfpga_v2.4.1_21.10.01_pr
+			       Built : 09:12:36, Dec 13 2021
+
+Bootloader
+----------
+
+	Processor:             Stratix 10
+	Board:	               Intel SOCFPGA Stratix 10 Board
+	Board Revision:        Rev B0 devkit
+	BootLoader:            U-Boot
+	BootLoader Version:    U-Boot 2021.07 (Dec 17 2021 - 14:15:23 +0000)socfpga_stratix10
+
+4.1.3 Known hardware Issues
 ---------------------------
 None.
