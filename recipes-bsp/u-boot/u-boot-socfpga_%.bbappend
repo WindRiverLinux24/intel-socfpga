@@ -17,7 +17,8 @@ SRC_URI_append_intel-socfpga-64 = " \
 		'file://0001-driver-watchdog-enable-wdt-command-by-default.patch \
 		 file://0001-Update-settings-for-ostree.patch \
 		 file://0001-configs-socfpga-create-MMC-specific-defconfig-for-st.patch \
-		 file://0001-configs-socfpga-create-MMC-specific-defconfig-for-ag.patch', d)} \
+		 file://0001-configs-socfpga-create-MMC-specific-defconfig-for-ag.patch \
+		 file://0001-arm-dts-socfpga-set-specific-atf-file-name-for-each-.patch', d)} \
 	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
 "
 
@@ -29,7 +30,12 @@ do_compile_prepend() {
 	if ${@bb.utils.contains("MACHINE", "intel-socfpga-64", "true", "false", d)}; then
 		if ! ${@bb.utils.contains("UBOOT_VERSION", "v2020.10", "true", "false", d)}; then
 			for config in ${UBOOT_MACHINE}; do
-				cp ${DEPLOY_DIR_IMAGE}/bl31.bin ${S}/bl31.bin
+				if [ "$config" = "socfpga_stratix10_mmc_defconfig" ];then
+					cp ${DEPLOY_DIR_IMAGE}/bl31-stratix10.bin ${S}/bl31-stratix10.bin
+				fi
+				if [ "$config" = "socfpga_agilex_mmc_defconfig" ];then
+					cp ${DEPLOY_DIR_IMAGE}/bl31-agilex.bin ${S}/bl31-agilex.bin
+				fi
 			done
 		fi
 	fi

@@ -1,0 +1,38 @@
+From ff50ab14106df7e066509ea134328b12294acc0e Mon Sep 17 00:00:00 2001
+From: Meng Li <Meng.Li@windriver.com>
+Date: Thu, 30 Dec 2021 19:26:32 +0800
+Subject: [PATCH] arm: dts: socfpga: set specific atf file name for each
+ platform
+
+When build the fit u-boot image for multiple platforms at one
+time, it needs multiple atf images for each platform. So, set
+specific atf file name to use the corresponding atf image for
+each platform.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi b/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi
+index e10f8e1757..701bd6aba3 100644
+--- a/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi
++++ b/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi
+@@ -160,4 +160,14 @@
+ };
+ #endif
+ 
++#if defined(CONFIG_TARGET_SOCFPGA_STRATIX10_SOCDK)
++&atf_blob {
++	filename = "bl31-stratix10.bin";
++};
++#elif defined(CONFIG_TARGET_SOCFPGA_AGILEX_SOCDK)
++&atf_blob {
++	filename = "bl31-agilex.bin";
++};
++#endif
++
+ #endif
+-- 
+2.17.1
+
