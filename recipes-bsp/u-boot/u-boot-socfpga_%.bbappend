@@ -18,7 +18,8 @@ SRC_URI_append_intel-socfpga-64 = " \
 		 file://0001-Update-settings-for-ostree.patch \
 		 file://0001-configs-socfpga-create-MMC-specific-defconfig-for-st.patch \
 		 file://0001-configs-socfpga-create-MMC-specific-defconfig-for-ag.patch \
-		 file://0001-arm-dts-socfpga-set-specific-atf-file-name-for-each-.patch', d)} \
+		 file://0001-arm-dts-socfpga-set-specific-atf-file-name-for-each-.patch \
+		 file://0001-configs-socfpga-create-NAND-specific-defconfig-for-A.patch', d)} \
 	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
 "
 
@@ -133,6 +134,7 @@ do_deploy_append() {
 
 UBOOT_CONFIG[stratix10-socdk-mmc] = "socfpga_stratix10_mmc_defconfig"
 UBOOT_CONFIG[agilex-socdk-mmc] = "socfpga_agilex_mmc_defconfig"
+UBOOT_CONFIG[agilex-socdk-nand] = "socfpga_agilex_nand_defconfig"
 
 COMPATIBLE_MACHINE ?= "(^$)"
 COMPATIBLE_MACHINE_intel-socfpga-64 = "intel-socfpga-64"
