@@ -1095,6 +1095,9 @@ Note: When run FPGA GPIO feature, please use socfpga_stratix10_socdk_ghrd.dtb fi
 15. Bootloader
 ==============
 
+15.1 Introduction
+-----------------
+
 Now, there are 2 kinds of bootloader mode supported on aarch 64 socfpga platform.
 Legacy mode: spl+u-boot, bootrom loads spl, and then spl loads u-boot.
 ATF mode: spl+atf+u-boot, bootrom loads spl, and then spl loads bl31, and then bl31 loads u-boot.
@@ -1105,3 +1108,13 @@ So, upgrade u-boot to v2021.07 and use ATF mode by default.
 About the old u-boot v2020.10, it is still preserved for current customer who doesn't want to
 upgrade their bootload version. To use the u-boot v2020.10, please add below content in local.conf.
 PREFERRED_VERSION_u-boot-socfpga ?= "v2020.10%"
+
+15.2 Known issue
+----------------
+
+15.2.1 CPU OFF/ON Limitation
+
+When using u-boot v2021.07 ATF mode, there is a limitation of cpu off/on feature.
+The cpu0 doesn't support off/on operation, otherwise it causes board reset.
+Therefore, creating a patch in kernel to remove the online file interface of cpu0
+to avoid board reset even if there is a mistake operation to cpu0.
