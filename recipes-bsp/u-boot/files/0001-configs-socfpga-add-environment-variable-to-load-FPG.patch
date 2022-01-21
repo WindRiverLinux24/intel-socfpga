@@ -1,0 +1,39 @@
+From bfce4c571e8550610a7931262680719b9d91742c Mon Sep 17 00:00:00 2001
+From: Meng Li <Meng.Li@windriver.com>
+Date: Fri, 21 Jan 2022 12:49:32 +0800
+Subject: [PATCH] configs: socfpga: add environment variable to load FPGA image
+ from NAND flash
+
+Now, booting from NAND flash is supported. So, add a environment
+variable to load FPGA image from NAND flash.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ include/configs/socfpga_soc64_common.h | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
+index 47262fabd5..9d7eb765a5 100644
+--- a/include/configs/socfpga_soc64_common.h
++++ b/include/configs/socfpga_soc64_common.h
+@@ -242,7 +242,16 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+ 		"rsu display_dcmf_status; rsu display_max_retry\0" \
+ 	"smc_fid_rd=0xC2000007\0" \
+ 	"smc_fid_wr=0xC2000008\0" \
+-	"smc_fid_upd=0xC2000009\0 "
++	"smc_fid_upd=0xC2000009\0 " \
++	"fpgaload=ubi part root; setexpr.b reg *0xFFD120DC; " \
++				"if itest $reg -eq 3; then bridge enable; " \
++				"else ubi readvol ${loadaddr} fpga; " \
++				"setexpr.l tmp *${loadaddr}; " \
++				"if itest $tmp -eq 0x62294895; " \
++				"then fpga load 0 $loadaddr $filesize; bridge enable; " \
++				"else setenv loop_count 1 2 3; for i in ${loop_count}; " \
++				"do echo The FPGA image is not in fpga volume, please BURN FPGA image into fpga volume!; " \
++				"sleep 1; done; fi; fi;\0"
+ #endif /*#if IS_ENABLED(CONFIG_DISTRO_DEFAULTS)*/
+ 
+ /*
+-- 
+2.17.1
+
