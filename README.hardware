@@ -1,4 +1,4 @@
-		Intel Stratix 10 SOCFPGA Board Support Package
+		Intel Stratix10/Agilex SOCFPGA Board Support Package
 
 
 Table of Contents
@@ -16,11 +16,13 @@ Table of Contents
 This BSP supports the following boards:
 
   + Intel Stratix 10 SOCFPGA board: CortexA53 processor, Rev B0 Board.
+  + Intel Agilex SOCFPGA board: CortexA53 processor, Rev A Board.
 
 2. Change History
 =================
 
   - 2021/06 (LINUXPG-709) Linux-10.21 RCPL01: Add Intel Stratix 10 SOCFPGA board support
+  - 2022/02 (LINUXPG-1031) Linux-10.21 RCPL11: Add Intel Agilex SOCFPGA board support
 
 3. BSP Features
 ===============
@@ -37,7 +39,7 @@ the corresponding h/w features exist.
   o Bus
     + I2C: Five I2C controllers, DesignWare APB I2C controller (DW_apb_i2c)
     + SPI: Synopsys DesignWare Synchronous Serial Interface (SSI) controller (DW_apb_ssi)
-    + PCIe: A Gen3x8 Capable Root Port from FPGA side.
+    + PCIe: A Gen3x8 Capable Root Port from FPGA side.(stratix10 only)
 
   o Network
     + Ethernet: Three 10/100/1000 Ethernet media access controls (MAC) with integrated DMA
@@ -51,6 +53,7 @@ the corresponding h/w features exist.
   o Storage
     + SD/MMC: DesignWare High-Speed SD/MMC controller
     + Nor flash: n25q00
+    + NAND: CadenceDesign IP NAND Flash Memory Controller(Agilex only)
 
   o Misc Devices
     + UART: Two DesignWare controllers, based on an industry standard 16550
@@ -58,12 +61,12 @@ the corresponding h/w features exist.
     + GPIO(HPS): Synopsys DesignWare APB General Purpose Programming I/O (DW_apb_gpio) peripheral
     + GPIO(FPGA): FPGA SW3, FPGA button and FPGA led
     + QSPI: Quad-SPI flash controller based on Cadence Quad SPI controller
-    + RTC: DS1339 based on I2C
+    + RTC: DS1339 based on I2C(stratix10 only)
     + DMA: On-Chip ARM Corelink DMA Controller (DMA-330)
     + FPGA I/O
-    + EEPROM: atmel,24c32
-    + Temp: maxim,max1619
-    + ADC: ltc2497
+    + EEPROM: atmel,24c32(stratix10 only)
+    + Temp: maxim,max1619(stratix10 only)
+    + ADC: ltc2497(stratix10 only)
     + Watchdog: Synopsys DesignWare APB Watchdog Timer
     + FPGA manager
     + Remote System Update
@@ -75,7 +78,6 @@ the corresponding h/w features exist.
 The following features are not supported and validated:
 
     x HSMC interface
-    x NAND: CadenceDesign IP NAND Flash Memory Controller(There is no FPGA design supporting it)
 
 4. BSP Notes
 ============
@@ -136,5 +138,43 @@ Bootloader
 	BootLoader Version:    U-Boot 2021.07 (Dec 17 2021 - 14:15:23 +0000)socfpga_stratix10
 
 4.1.3 Known hardware Issues
+---------------------------
+None.
+
+
+4.2 Agilex SOCFPGA
+===================
+
+4.2.1 Validated Board Info
+--------------------------
+
+This BSP is only validated in the following environment. If you use this
+BSP in a different environment it maybe have some issues.
+
+Preloader
+----------
+
+	Board:	               Intel SOCFPGA Agilex Board
+	BootLoader:            U-Boot SPL
+	BootLoader Version:    U-Boot SPL 2021.07 (Jan 19 2022 - 03:03:35 +0000)
+
+Arm Trust Firmware
+------------------
+
+	Board:	               Intel SOCFPGA Agilex Board
+	BootLoader: 	       BL31
+	BootLoader Version:    v2.5.0(release):QPDS21.1STD_REL_GSRD_PR
+			       Built : 07:59:05, Jan 26 2022
+
+Bootloader
+----------
+
+	Processor:             Agilex
+	Board:	               Intel SOCFPGA Agilex Board
+	Board Revision:        Rev A devkit
+	BootLoader:            U-Boot
+	BootLoader Version:    U-Boot 2021.07 (Jan 26 2022 - 07:59:51 +0000)socfpga_agilex
+
+4.2.2 Known hardware Issues
 ---------------------------
 None.
