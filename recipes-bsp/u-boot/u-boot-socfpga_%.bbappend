@@ -20,7 +20,8 @@ SRC_URI_append_intel-socfpga-64 = " \
 		 file://0001-configs-socfpga-create-MMC-specific-defconfig-for-ag.patch \
 		 file://0001-arm-dts-socfpga-set-specific-atf-file-name-for-each-.patch \
 		 file://0001-configs-socfpga-create-NAND-specific-defconfig-for-A.patch \
-		 file://0001-configs-socfpga-add-environment-variable-to-load-FPG.patch', d)} \
+		 file://0001-configs-socfpga-add-environment-variable-to-load-FPG.patch \
+		 file://0001-drivers-watchdog-restore-watchdog-default-timeout-va.patch', d)} \
 	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
 "
 
