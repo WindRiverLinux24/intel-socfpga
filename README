@@ -342,7 +342,7 @@ Create a few images for testing: 0-factory, 1-production1, 2-production2, 3-prod
 After building, there will be the following SOF files:
 For Stratix10 platform
 s10_soc_devkit_ghrd/output_files/ghrd_1sx280lu2f50e2vg.sof
-For Stratix10 platform
+For Agilex platform
 s10_soc_devkit_ghrd/output_files/ghrd_agfb014r24b2e2v.sof
 
 Note: For Agilex platform, set HPS_ENABLE_SGMII as 0 in below 2 files, because the sgmii feature needs special license on Agilex platform.
@@ -1307,3 +1307,250 @@ When using u-boot v2021.07 ATF mode, there is a limitation of cpu off/on feature
 The cpu0 doesn't support off/on operation, otherwise it causes board reset.
 Therefore, creating a patch in kernel to remove the online file interface of cpu0
 to avoid board reset even if there is a mistake operation to cpu0.
+
+
+16. Boot System From NAND Flash(Agilex only)
+============================================
+
+Please follow below steps to implement booting system from NAND flash.
+
+16.1 Prerequisites
+------------------
+
+16.1.1 Software Preparation
+---------------------------
+
+Please download below 2 tools from https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html, linux version.
+- Quartus Prime Pro Edition Programmer and Tools v21.3
+- Quartus Prime Pro Edition Software v21.3
+Note: Please apply for license for building Stratix10/Agilex *.sof file.
+      Customer also can get the pre-build *.sof file from https://releases.rocketboards.org/release/2021.11/.
+
+Please download Arm Development Studio for Intel SoC FPGA from https://fpgasoftware.intel.com/armds/
+
+16.1.2 Hardware Preparation
+---------------------------
+
+Connect NAND/eMMC Daughtercard with Agilex mother board, and then set jumper as below:
+J2 	unpopulated
+J9 	unpopulated
+J10 	populated 2-3
+J11 	populated 1-2
+
+16.2 Building Hardware Design
+-----------------------------
+
+Run below commands step by step
+
+	# <path-to-quartus>/intelFPGA_pro/21.3/nios2eds/nios2_command_shell.sh
+	# mkdir hardware_designs
+	# git clone https://github.com/altera-opensource/ghrd-socfpga.git
+	# cd ghrd-socfpga
+	# git checkout -b QPDS-21.3pro-21.1std QPDS-21.3pro-21.1std
+	# cp -r agilex_soc_devkit_ghrd ../hardware_designs
+	# cd ../hardware_designs/agilex_soc_devkit_ghrd
+	# sed -i 's/DAUGHTER_CARD .*= devkit_dc_oobe/DAUGHTER_CARD ?= devkit_dc_nand/g' Makefile
+	# sed -i 's/QUARTUS_DEVICE .*= AGFB014R24A3E3VR0/QUARTUS_DEVICE ?= AGFB014R24B2E2V/g' Makefile
+	# make clean && make scrub_clean && rm -rf output_files
+	# export IP_ROOTDIR=<path-to-quartus>/intelFPGA_pro/21.3/ip
+	# make generate_from_tcl
+	# make sof
+
+After building, there will be the following SOF files:
+s10_soc_devkit_ghrd/output_files/ghrd_agfb014r24b2e2v.sof
+
+Note: set HPS_ENABLE_SGMII as 0 in below 2 files, because the sgmii feature needs special license on Agilex platform.
+      agilex_soc_devkit_ghrd/Makefile
+      agilex_soc_devkit_ghrd/board/board_devkit_make_config.inc
+
+16.3 Building U-Boot
+--------------------
+
+NAND flash u-boot for Agilex is also built when building intel-socfpga BSP project, it will be in directory
+<project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/socfpga_agilex_nand_defconfig
+
+
+16.4 Building FPGA Image
+------------------------
+
+Run below commands step by step
+
+	# mkdir fpga_image
+	# cd fpga_image
+	# cp <project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/socfpga_agilex_nand_defconfig/u-boot-spl-dtb.hex ./
+	# cp <hardware design dir>/s10_soc_devkit_ghrd/output_files/ghrd_agfb014r24b2e2v.sof ./
+	# <path-to-quartus>/intelFPGA_pro/21.3/nios2eds/nios2_command_shell.sh
+	# quartus_pfg -c ghrd_agfb014r24b2e2v.sof flash_image_nand.jic -o device=MT25QU02G -o flash_loader=AGFB014R24B -o hps_path=u-boot-spl-dtb.hex -o mode=ASX4
+
+The FPGA Image(flash_image_nand.jic) is generated.
+
+16.5 Building FPGA Configuration File
+-------------------------------------
+
+Run below commands step by step
+
+	# cd fpga_image
+	# <path-to-quartus>/intelFPGA_pro/21.3/nios2eds/nios2_command_shell.sh
+	# quartus_pfg -c -o hps_path=u-boot-spl-dtb.hex ghrd_agfb014r24b2e2v.sof ghrd_agfb014r24b2e2v_hps_nand.sof
+	# quartus_pfg -c -o hps=on ghrd_agfb014r24b2e2v_hps_nand.sof ghrd_nand.rbf
+
+The FPGA configuration file(ghrd_nand.core.rbf) is generated.
+
+16.6 Building Ubifs Image
+-------------------------
+
+Run below commands step by step
+
+	# mkdir nand-rootfs
+	# cp <project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.tar.bz2 ./
+	# tar jxvf wrlinux-image-std-intel-socfpga-64.tar.bz2
+	# rm wrlinux-image-std-intel-socfpga-64.tar.bz2
+	# cd ..
+	# mkfs.ubifs -r nand-rootfs -m 2048 -e 126976 -c 4096 -o ubifs.img
+
+The ubifs image(ubifs.img) is generated.
+
+16.7 Burn FPGA Image Into QSPI Flash
+------------------------------------
+
+Connect CN1 to PC host with usb cable, and then follow below steps.
+
+16.7.1 Enable JTAG
+------------------
+
+Set SW1 as below status, and then Power on the board.
+
+SW1: ON-ON-ON-ON
+
+16.7.2 Program QSPI Flash
+-------------------------
+
+	# cd fpga_image
+	# <path-to-quartus>/intelFPGA_pro/21.3/nios2eds/nios2_command_shell.sh
+	# quartus_pgm -c 1 -m jtag -o "pvi;flash_image_nand.jic"
+
+16.7.3 Disable JTAG
+-------------------
+
+Power off the board, and then set SW1 as below status.
+
+SW1: ON-OFF-OFF-ON
+
+16.8 Burn Images Into NAND Flash
+--------------------------------
+
+At the beginning. there is not any image in NAND flash, so it needs to boot up system with JTAG.
+
+16.8.1 Enable JTAG
+------------------
+
+Set SW1 as below status, and then Power on the board.
+
+SW1: ON-ON-ON-ON
+
+16.8.2 Configure the FPGA
+-------------------------
+
+	# cd fpga_image
+	# cp <hardware design dir>/s10_soc_devkit_ghrd/output_files/ghrd_agfb014r24b2e2v_hps_debug.sof ./
+	# <path-to-quartus>/intelFPGA_pro/21.3/nios2eds/nios2_command_shell.sh
+	# quartus_pgm --no_banner --mode=jtag -o "p;ghrd_agfb014r24b2e2v_hps_debug.sof"
+
+16.8.3 Create Debugger Script
+-----------------------------
+
+	# cd fpga_image
+	# cat <<EOT > run-u-boot.ds
+	  interrupt
+	  restore "u-boot-socfpga/spl/u-boot-spl-dtb.bin" binary 0xFFE00000
+	  loadfile "u-boot-socfpga/spl/u-boot-spl"
+	  core 1
+	  set \$PC = \$ENTRYPOINT
+	  core 2
+	  set \$PC = \$ENTRYPOINT
+	  core 3
+	  set \$PC = \$ENTRYPOINT
+	  core 0
+	  set \$PC = \$ENTRYPOINT
+	  thbreak board_boot_order
+	  continue
+	  wait
+	  set spl_boot_list[0]=0
+	  set \$PC=\$LR
+	  restore "u-boot-socfpga/u-boot.itb" binary 0x2000000
+	  continue
+	  EOT
+
+16.8.4 Determine Cable Connection Info
+--------------------------------------
+
+Run jtagconfig to determine the details about the Intel FPGA cable connection.
+
+	# jtagconfig
+	1) Agilex SI/SoC Dev Kit [1-1]
+	  C341A0DD   AGFB014R24(A|B)
+	  031830DD   10M16S(A|C|L)
+
+16.8.5 Run Debugger Script
+--------------------------
+
+Run the debugger script with below command, using the connection parameters reported above by jtagconfig command.
+
+	# cd fpga_image
+	# mkdir u-boot-socfpga
+	# mkdir u-boot-socfpga/spl
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2021.07+gitAUTOINC+ee63370553-r0/build/socfpga_agilex_nand_defconfig/u-boot.itb ./u-boot-socfpga
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2021.07+gitAUTOINC+ee63370553-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl ./u-boot-socfpga/spl
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2021.07+gitAUTOINC+ee63370553-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl-dtb.bin ./u-boot-socfpga/spl
+	# <path-to-developmentstudio>/arm/developmentstudio-2021.1/bin/armdbg  \
+	  --cdb-entry="Intel SoC FPGA::Agilex SoC::Bare Metal Debug::Bare Metal Debug::Cortex-A53x4 SMP::Intel FPGA Download Cable"  \
+	  --cdb-entry-param="rvi_address=Agilex SI/SoC Dev Kit on localhost [1-1]:Agilex SI/SoC Dev Kit 1-1"  \
+	  --continue_on_error=true \
+	  --stop_on_connect=false \
+	  -s run-u-boot.ds
+
+16.8.6 Burn Images
+------------------
+
+The above commands will cause the U-Boot to start running on HPS.
+Stop U-Boot counter by pressing any key on the serial console.
+And then run below commands step by step.
+
+Note: Setup tftp server firstly.
+
+	# setenv ipaddr <board ip>
+	# setenv netmask <netmask>
+	# setenv gatewayip <gateway ip>
+	# setenv serverip <server ip>
+	# tftp 0x2000000 <server ip>:<tftp-dir>/u-boot.itb
+	# nand erase.part u-boot
+	# nand write 0x2000000 u-boot $filesize
+	# nand erase.part root
+	# ubi part root
+	# ubi createvol kernel 0x3000000 static
+	# ubi createvol dtb 0x100000 static
+	# ubi createvol fpga 0x800000 static
+	# ubi createvol env 0x100000 static
+	# ubi createvol rootfs 0x20000000 dynamic
+	# tftp 0x2000000 <server ip>:<tftp-dir>/Image
+	# ubi writevol 0x2000000 kernel $filesize
+	# tftpboot 0x8000000 <server ip>:<tftp-dir>/socfpga_agilex_socdk_nand.dtb
+	# ubi writevol 0x8000000 dtb $filesize
+	# tftpboot 0x2000000 <server ip>:<tftp-dir>/ghrd_nand.core.rbf
+	# ubi writevol 0x2000000 fpga $filesize
+	# tftpboot 0x2000000 <server ip>:<tftp-dir>/ubifs.img
+	# ubi writevol 0x2000000 rootfs $filesize
+
+After burning all the images into NAND flash, power off board.
+
+16.8.7 Disable JTAG
+-------------------
+
+Set SW1 as below status.
+
+SW1: ON-OFF-OFF-ON
+
+16.8.8 Boot System From NAND Flash
+----------------------------------
+
+Power on board, system will boot up from NAND flash.
