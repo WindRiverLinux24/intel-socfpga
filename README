@@ -115,9 +115,18 @@ SOCFPGA_STRATIX10 # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 SOCFPGA_STRATIX10 # booti 0x2000000 - 0x8000000
 
 For Agilex platform:
+Boot from SD card
 SOCFPGA_AGILEX # run fatscript
+Boot from NAND flash
+SOCFPGA_AGILEX # run fpgaload
+
 SOCFPGA_AGILEX # tftp 0x2000000 "/<tftp root>/Image"
+
+Boot from SD card
 SOCFPGA_AGILEX # tftp 0x8000000 "/<tftp root>/socfpga_agilex_socdk.dtb"
+Boot from NAND flash
+SOCFPGA_AGILEX # tftp 0x8000000 "/<tftp root>/socfpga_agilex_socdk_nand.dtb"
+
 SOCFPGA_AGILEX # run linux_qspi_enable
 SOCFPGA_AGILEX # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 			  nfsroot=<nfs server>:<nfs root>,nolock \
@@ -1036,9 +1045,10 @@ Build Image
 Power on board, program FPGA image into flash with Quartus programmer tool,
 and then run below commands to boot up system.
 
-	SOCFPGA_AGILEX # run fatscript
+
+	SOCFPGA_AGILEX # run fpgaload
 	SOCFPGA_AGILEX # tftp 0x2000000 "/<tftp root>/Image"
-	SOCFPGA_AGILEX # tftp 0x8000000 "/<tftp root>/socfpga_agilex_socdk_sgmii.dtb"
+	SOCFPGA_AGILEX # tftp 0x8000000 "/<tftp root>/socfpga_agilex_socdk_nand_sgmii.dtb"
 	SOCFPGA_AGILEX # run linux_qspi_enable
 	SOCFPGA_AGILEX # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 				  nfsroot=<nfs server>:<nfs root>,nolock \
@@ -1197,9 +1207,9 @@ Build Image
 Power on board, program FPGA image into flash with Quartus programmer tool,
 and then run below commands to boot up system.
 
-	SOCFPGA_AGILEX # run fatscript
+	SOCFPGA_AGILEX # run fpgaload
 	SOCFPGA_AGILEX # tftp 0x2000000 "/<tftp root>/Image"
-	SOCFPGA_AGILEX # tftp 0x8000000 "/<tftp root>/socfpga_agilex_socdk_ghrd.dtb"
+	SOCFPGA_AGILEX # tftp 0x8000000 "/<tftp root>/socfpga_agilex_socdk_nand_ghrd.dtb"
 	SOCFPGA_AGILEX # run linux_qspi_enable
 	SOCFPGA_AGILEX # setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw \
 				  nfsroot=<nfs server>:<nfs root>,nolock \
