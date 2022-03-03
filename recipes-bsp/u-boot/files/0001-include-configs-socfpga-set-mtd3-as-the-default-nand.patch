@@ -1,0 +1,38 @@
+From 7532b16b1d9d113a812fb3057c8b722ab9adbd9b Mon Sep 17 00:00:00 2001
+From: Meng Li <Meng.Li@windriver.com>
+Date: Thu, 3 Mar 2022 17:08:29 +0800
+Subject: [PATCH] include: configs: socfpga: set mtd3 as the default nand
+ rootfs on Agilex platform.
+
+Both qspi-nor flash and nand flash are supported on Agilex platform.
+Based on the kernel repo commit f334424a2891("mtd: rawnand: denali_dt:
+start denali nand driver a little later "),  the qspi-nor flash driver
+is loaded earlier than nand flash driver, so  qspi-nor flash has partition
+mtd0 and mtd1, and nand flash has partition mtd2 and mtd3. In order to
+mount nand rootfs properly during booting from nand flash, it needs to
+set ubi.mtd=3 correctly in bootargs.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ include/configs/socfpga_soc64_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ mode change 100644 => 100755 include/configs/socfpga_soc64_common.h
+
+diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
+old mode 100644
+new mode 100755
+index 9d7eb765a5..ebfc7cc546
+--- a/include/configs/socfpga_soc64_common.h
++++ b/include/configs/socfpga_soc64_common.h
+@@ -231,7 +231,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+ 	"nandroot=ubi0:rootfs\0" \
+ 	"nandload=ubi part root; ubi readvol ${loadaddr} kernel; ubi readvol ${fdt_addr} dtb\0" \
+ 	"nandboot=setenv bootargs " CONFIG_BOOTARGS \
+-			" root=${nandroot} rw rootwait rootfstype=ubifs ubi.mtd=1; " \
++			" root=${nandroot} rw rootwait rootfstype=ubifs ubi.mtd=3; " \
+ 			"booti ${loadaddr} - ${fdt_addr}\0" \
+ 	"nandfitboot=setenv bootargs " CONFIG_BOOTARGS \
+ 			" root=${nandroot} rw rootwait rootfstype=ubifs ubi.mtd=1; " \
+-- 
+2.35.1
+
