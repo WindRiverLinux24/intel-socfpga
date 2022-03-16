@@ -1118,7 +1118,7 @@ Determine the GPIO numbers for the DIPSWs with below command
 Get DIPSWs value
 
 	# echo 416 > /sys/class/gpio/export
-	# echo in > gpio416/direction
+	# echo in > /sys/class/gpio/gpio416/direction
 	# cat /sys/class/gpio/gpio416/value
 	1
 	set SW3.1 as on status
@@ -1139,7 +1139,7 @@ Determine the GPIO numbers for the BUTTONs with below command
 Get BUTTONs value
 
 	# echo 448 > /sys/class/gpio/export
-	# echo in > gpio448/direction
+	# echo in > /sys/class/gpio/gpio448/direction
 	# cat /sys/class/gpio/gpio448/value
 	1
 	keep S4 as push down status while read the value of gpio448
@@ -1170,12 +1170,12 @@ Run below command to start/stop blinking FPGA LEDs.
 	# echo none > /sys/class/leds/fpga_led0/trigger
 
 - To start/stop blinking FPGA_LED1(D23):
-	# echo timer > /sys/class/leds/fpga_led1/brightness
-	# echo none > /sys/class/leds/fpga_led1/brightness
+	# echo timer > /sys/class/leds/fpga_led1/trigger
+	# echo none > /sys/class/leds/fpga_led1/trigger
 
 - To start/stop blinking FPGA_LED2(D25):
-	# echo timer > /sys/class/leds/fpga_led2/brightness
-	# echo none > /sys/class/leds/fpga_led2/brightness
+	# echo timer > /sys/class/leds/fpga_led2/trigger
+	# echo none > /sys/class/leds/fpga_led2/trigger
 
 Note: When run FPGA GPIO feature, please use socfpga_stratix10_socdk_ghrd.dtb file.
 
@@ -1282,12 +1282,12 @@ Run below command to start/stop blinking FPGA LEDs.
 	# echo none > /sys/class/leds/fpga_led0/trigger
 
 - To start/stop blinking FPGA_LED1(D8):
-	# echo timer > /sys/class/leds/fpga_led1/brightness
-	# echo none > /sys/class/leds/fpga_led1/brightness
+	# echo timer > /sys/class/leds/fpga_led1/trigger
+	# echo none > /sys/class/leds/fpga_led1/trigger
 
 - To start/stop blinking FPGA_LED2(D9):
-	# echo timer > /sys/class/leds/fpga_led2/brightness
-	# echo none > /sys/class/leds/fpga_led2/brightness
+	# echo timer > /sys/class/leds/fpga_led2/trigger
+	# echo none > /sys/class/leds/fpga_led2/trigger
 
 Note: When run FPGA GPIO feature, please use socfpga_stratix10_socdk_ghrd.dtb file.
 
