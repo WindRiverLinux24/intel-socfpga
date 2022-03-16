@@ -43,8 +43,9 @@ the corresponding h/w features exist.
 
   o Network
     + Ethernet: Three 10/100/1000 Ethernet media access controls (MAC) with integrated DMA
-                      The EMACs are instances of the SynopsysDesignWare Universal Ethernet MAC
-		Two SGMII RJ45 ethernet ports based on FPGA hardware design
+		The EMACs are instances of the SynopsysDesignWare Universal Ethernet MAC
+		Two SGMII RJ45 ethernet ports based on FPGA hardware design(stratix10 only)
+		One SGMII RJ45 ethernet ports based on FPGA hardware design(Agilex only)
 
   o USB
     + Two USB On-the-Go (OTG) controllers with DMA.

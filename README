@@ -1061,8 +1061,10 @@ After system boots up, execute the following commands to verify PCIe interface:
 	# dhcpcd eth1
 	# ping <ip address> -I eth1 -c 5
 
-Note: When run FPGA SGMII ethernet feature, please use socfpga_agilex_socdk_sgmii.dtb file.
-
+Note1: When run FPGA SGMII ethernet feature, please use socfpga_agilex_socdk_sgmii.dtb file.
+Note2: The FPGA SGMII ethernet feature is only supported when Agilex platform boots up SD daughter card.
+       It is not supported when Agilex platform boots up NAND daughter card, because the FPGA image for
+       NAND daughter card doesn't SGMII ethernet design.
 
 14. FPGA GPIO
 =============
