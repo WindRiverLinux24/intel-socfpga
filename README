@@ -1321,6 +1321,13 @@ The cpu0 doesn't support off/on operation, otherwise it causes board reset.
 Therefore, creating a patch in kernel to remove the online file interface of cpu0
 to avoid board reset even if there is a mistake operation to cpu0.
 
+15.3  Build U-Boot
+------------------
+
+By default, the u-boot image is compiled and installed. If you want u-boot to be manually
+compiled separately, use the following command：
+
+        # bitbake u-boot-socfpga
 
 16. Boot System From NAND Flash(Agilex only)
 ============================================
