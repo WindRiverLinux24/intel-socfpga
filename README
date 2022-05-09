@@ -73,7 +73,7 @@ along with patch descriptions, use git to see what changed on the default
 kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
 
   # cd tmp-glibc/work-shared/<bsp_name>/kernel-source
-  # git whatchanged standard/base..v5.10/standard/intel-sdk-5.10/intel-socfpga
+  # git whatchanged standard/base..v5.15/standard/intel-sdk-5.15/intel-socfpga
 
 
 4. Boot Instructions
