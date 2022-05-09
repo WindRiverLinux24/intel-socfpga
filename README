@@ -939,7 +939,7 @@ The following PCIe peripheral:
 
 Simply add line as follows to ${buildprj}/build/conf/local.conf:
 
-	KERNEL_FEATURES_append = " features/intel-e1xxxx/intel-e1xxxx.scc"
+	KERNEL_FEATURES:append = " features/intel-e1xxxx/intel-e1xxxx.scc"
 
 Intel E1000E NIC driver will be built in kernel Image
 

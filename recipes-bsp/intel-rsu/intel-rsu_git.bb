@@ -22,7 +22,7 @@ COMPATIBLE_MACHINE ?= "intel-socfpga-64"
 
 export LIBRSU_VER="0"
 
-do_install_append () {
+do_install:append () {
     install -d ${D}/etc
     install -m 755 ${S}/etc/qspi.rc ${D}/etc/librsu.rc
     install -m 755 -d ${D}${includedir}

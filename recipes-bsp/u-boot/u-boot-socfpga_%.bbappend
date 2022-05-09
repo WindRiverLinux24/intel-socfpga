@@ -1,15 +1,15 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-DEPENDS_append_intel-socfpga-64 = " coreutils-native u-boot-tools virtual/kernel"
-DEPENDS_append_intel-socfpga-64 = " arm-trusted-firmware bash"
-DEPENDS_append_intel-socfpga-64 = " s10-u-boot-scr"
+DEPENDS:append:intel-socfpga-64 = " coreutils-native u-boot-tools virtual/kernel"
+DEPENDS:append:intel-socfpga-64 = " arm-trusted-firmware bash"
+DEPENDS:append:intel-socfpga-64 = " s10-u-boot-scr"
 
-SRC_URI_intel-socfpga-64 = "${UBOOT_REPO};protocol=${UBOOT_PROT};nobranch=1"
-SRCREV_intel-socfpga-64 = "${@bb.utils.contains('UBOOT_VERSION', 'v2020.10', \
+SRC_URI:intel-socfpga-64 = "${UBOOT_REPO};protocol=${UBOOT_PROT};nobranch=1"
+SRCREV:intel-socfpga-64 = "${@bb.utils.contains('UBOOT_VERSION', 'v2020.10', \
 		'584a2391639d89cff6476bbfbdf7d9c666970661', \
 		'ee63370553cd01f7237174fe1971991271b7648b', d)}"
 
-SRC_URI_append_intel-socfpga-64 = " \
+SRC_URI:append:intel-socfpga-64 = " \
 	file://0001-driver-watchdog-reset-watchdog-in-designware_wdt_sto.patch \
 	${@bb.utils.contains('UBOOT_VERSION', 'v2020.10', \
 		'file://0001-driver-watchdog-enable-wdt-command-by-default-v2020-10.patch \
@@ -30,7 +30,7 @@ inherit deploy
 
 do_compile[deptask] = "do_deploy"
 
-do_compile_prepend() {
+do_compile:prepend() {
 	if ${@bb.utils.contains("MACHINE", "intel-socfpga-64", "true", "false", d)}; then
 		if ! ${@bb.utils.contains("UBOOT_VERSION", "v2020.10", "true", "false", d)}; then
 			for config in ${UBOOT_MACHINE}; do
@@ -45,7 +45,7 @@ do_compile_prepend() {
 	fi
 }
 
-do_compile_append() {
+do_compile:append() {
 	if ${@bb.utils.contains("MACHINE", "intel-socfpga-64", "true", "false", d)}; then
 		if ${@bb.utils.contains("UBOOT_VERSION", "v2020.10", "true", "false", d)}; then
 			for config in ${UBOOT_MACHINE}; do
@@ -58,7 +58,7 @@ do_compile_append() {
 	fi
 }
 
-do_install_append() {
+do_install:append() {
 	if ! ${@bb.utils.contains("UBOOT_VERSION", "v2020.10", "true", "false", d)}; then
 		unset i j
 		for config in ${UBOOT_MACHINE}; do
@@ -78,7 +78,7 @@ do_install_append() {
 	fi
 }
 
-do_deploy_append() {
+do_deploy:append() {
 	if ${@bb.utils.contains("MACHINE", "intel-socfpga-64", "true", "false", d)}; then
 		if ${@bb.utils.contains("UBOOT_VERSION", "v2020.10", "true", "false", d)}; then
 			for config in ${UBOOT_MACHINE}; do
@@ -140,4 +140,4 @@ UBOOT_CONFIG[agilex-socdk-mmc] = "socfpga_agilex_mmc_defconfig"
 UBOOT_CONFIG[agilex-socdk-nand] = "socfpga_agilex_nand_defconfig"
 
 COMPATIBLE_MACHINE ?= "(^$)"
-COMPATIBLE_MACHINE_intel-socfpga-64 = "intel-socfpga-64"
+COMPATIBLE_MACHINE:intel-socfpga-64 = "intel-socfpga-64"
