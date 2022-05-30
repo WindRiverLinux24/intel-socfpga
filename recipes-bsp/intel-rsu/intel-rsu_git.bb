@@ -1,7 +1,7 @@
 SUMMARY = "Intel Remote System Update Tool"
 HOMEPAGE = "https://github.com/altera-opensource/intel-rsu"
 SECTION = "intel-rsu"
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://etc/qspi.rc;md5=4bc6d60efb3e09b02fee0d2ff2a52152"
 
 DEPENDS = "zlib"
