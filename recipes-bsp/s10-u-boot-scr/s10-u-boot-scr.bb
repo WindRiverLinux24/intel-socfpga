@@ -8,15 +8,11 @@ INHIBIT_DEFAULT_DEPS = "1"
 
 SRC_URI = "file://boot.txt \
 	file://ghrd.core.rbf \
-	${@bb.utils.contains('PREFERRED_VERSION_u-boot-socfpga', 'v2020.10%', '', 'file://boot.its', d)} \
+	file://boot.its \
 	"
 
 do_compile() {
-	if ${@bb.utils.contains("PREFERRED_VERSION_u-boot-socfpga", "v2020.10%", "true", "false", d)}; then
-		mkimage -A arm -T script -C none -n "Boot script" -d "${WORKDIR}/boot.txt" u-boot.scr
-	else
-		mkimage -f ${WORKDIR}/boot.its u-boot.scr
-	fi
+	mkimage -f ${WORKDIR}/boot.its u-boot.scr
 }
 
 inherit deploy nopackages

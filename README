@@ -1307,10 +1307,6 @@ ATF mode: spl+atf+u-boot, bootrom loads spl, and then spl loads bl31, and then b
 Intel recommends customer to use the ATF mode for common aarch64 platform.
 So, upgrade u-boot to v2021.07 and use ATF mode by default.
 
-About the old u-boot v2020.10, it is still preserved for current customer who doesn't want to
-upgrade their bootload version. To use the u-boot v2020.10, please add below content in local.conf.
-PREFERRED_VERSION_u-boot-socfpga ?= "v2020.10%"
-
 15.2 Known issue
 ----------------
 
