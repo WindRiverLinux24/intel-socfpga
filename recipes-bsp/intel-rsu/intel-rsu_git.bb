@@ -12,7 +12,7 @@ S = "${WORKDIR}/git"
 
 SRC_URI = "git://github.com/altera-opensource/intel-rsu.git;protocol=http;branch=master \
 	file://0001-intel-rsu-implement-automake-for-intel-rsu-package.patch"
-SRCREV = "c0e8fcd21a46562d7f3956ae5b0643504b28e9ba"
+SRCREV = "41c98ae4bb0680003a240372eec1a0d1594ca829"
 
 inherit autotools
 
