@@ -1305,7 +1305,7 @@ Legacy mode: spl+u-boot, bootrom loads spl, and then spl loads u-boot.
 ATF mode: spl+atf+u-boot, bootrom loads spl, and then spl loads bl31, and then bl31 loads u-boot.
 
 Intel recommends customer to use the ATF mode for common aarch64 platform.
-So, upgrade u-boot to v2021.07 and use ATF mode by default.
+Now ATF mode is enabled by default in the current supported u-boot.
 
 15.2 Known issue
 ----------------
@@ -1515,9 +1515,9 @@ Run the debugger script with below command, using the connection parameters repo
 	# cd fpga_image
 	# mkdir u-boot-socfpga
 	# mkdir u-boot-socfpga/spl
-	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2021.07+gitAUTOINC+ee63370553-r0/build/socfpga_agilex_nand_defconfig/u-boot.itb ./u-boot-socfpga
-	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2021.07+gitAUTOINC+ee63370553-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl ./u-boot-socfpga/spl
-	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2021.07+gitAUTOINC+ee63370553-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl-dtb.bin ./u-boot-socfpga/spl
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.01+gitAUTOINC+f75f1833a5-r0/build/socfpga_agilex_nand_defconfig/u-boot.itb ./u-boot-socfpga
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.01+gitAUTOINC+f75f1833a5-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl ./u-boot-socfpga/spl
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.01+gitAUTOINC+f75f1833a5-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl-dtb.bin ./u-boot-socfpga/spl
 	# <path-to-developmentstudio>/arm/developmentstudio-2021.1/bin/armdbg  \
 	  --cdb-entry="Intel SoC FPGA::Agilex SoC::Bare Metal Debug::Bare Metal Debug::Cortex-A53x4 SMP::Intel FPGA Download Cable"  \
 	  --cdb-entry-param="rvi_address=Agilex SI/SoC Dev Kit on localhost [1-1]:Agilex SI/SoC Dev Kit 1-1"  \
