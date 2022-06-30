@@ -23,7 +23,7 @@ new file mode 100644
 index 0000000000..b8c9197742
 --- /dev/null
 +++ b/configs/socfpga_agilex_mmc_defconfig
-@@ -0,0 +1,93 @@
+@@ -0,0 +1,94 @@
 +CONFIG_ARM=y
 +CONFIG_SPL_LDSCRIPT="arch/arm/mach-socfpga/u-boot-spl-soc64.lds"
 +CONFIG_ARCH_SOCFPGA=y
@@ -51,6 +51,7 @@ index 0000000000..b8c9197742
 +CONFIG_BOOTCOMMAND="run fatscript;run mmcload;run linux_qspi_enable;run rsu_status;run mmcboot"
 +# CONFIG_SPL_RAW_IMAGE_SUPPORT is not set
 +CONFIG_SPL_CRC32_SUPPORT=y
++CONFIG_SPL_CRC32=y
 +CONFIG_SPL_MTD_SUPPORT=y
 +CONFIG_SPL_CACHE=y
 +CONFIG_SPL_SPI_LOAD=y
