@@ -1,4 +1,4 @@
-From 04920b9b305be8bff1730048b26cbe84d6219e0d Mon Sep 17 00:00:00 2001
+From b0ea1f3513ddabd18d73dba61883e03dc983260e Mon Sep 17 00:00:00 2001
 From: Meng Li <Meng.Li@windriver.com>
 Date: Tue, 21 Dec 2021 17:56:02 +0800
 Subject: [PATCH] Update settings for ostree
@@ -17,10 +17,10 @@ Signed-off-by: Meng Li <Meng.Li@windriver.com>
  3 files changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/configs/socfpga_agilex_defconfig b/configs/socfpga_agilex_defconfig
-index b4f4251bf2..f71205032d 100644
+index ad0f27c4c048..15acf5d06535 100644
 --- a/configs/socfpga_agilex_defconfig
 +++ b/configs/socfpga_agilex_defconfig
-@@ -97,3 +97,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
+@@ -98,3 +98,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
  CONFIG_WDT=y
  # CONFIG_SPL_USE_TINY_PRINTF is not set
  CONFIG_PANIC_HANG=y
@@ -28,10 +28,10 @@ index b4f4251bf2..f71205032d 100644
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
 diff --git a/configs/socfpga_stratix10_defconfig b/configs/socfpga_stratix10_defconfig
-index a63cfeaa44..c18c49b9cb 100644
+index 52297c4b9abb..1264912161c0 100644
 --- a/configs/socfpga_stratix10_defconfig
 +++ b/configs/socfpga_stratix10_defconfig
-@@ -97,3 +97,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
+@@ -98,3 +98,6 @@ CONFIG_DESIGNWARE_WATCHDOG=y
  CONFIG_WDT=y
  # CONFIG_SPL_USE_TINY_PRINTF is not set
  CONFIG_PANIC_HANG=y
@@ -39,10 +39,10 @@ index a63cfeaa44..c18c49b9cb 100644
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
 diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
-index 1174dc3bdc..47262fabd5 100644
+index ef1ebc17f127..cd2cdd2e380f 100644
 --- a/include/configs/socfpga_soc64_common.h
 +++ b/include/configs/socfpga_soc64_common.h
-@@ -198,9 +198,10 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+@@ -202,9 +202,10 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  	"qspifitboot=setenv bootargs earlycon root=/dev/mtdblock1 rw " \
  		"rootfstype=jffs2 rootwait;bootm ${loadaddr}\0" \
  	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
@@ -54,9 +54,9 @@ index 1174dc3bdc..47262fabd5 100644
  	"mmcroot=/dev/mmcblk0p2\0" \
  	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
  		" root=${mmcroot} rw rootwait;" \
-@@ -224,7 +225,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
- 		" else fdt set /soc/clkmgr/clocks/qspi_clk clock-frequency" \
- 		" ${qspi_clock}; fi; fi\0" \
+@@ -230,7 +231,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+ 		" else fdt set /clocks/qspi-clk clock-frequency" \
+ 		" ${qspi_clock}; echo QSPI clock frequency updated; fi; fi\0" \
  	"scriptaddr=0x02100000\0" \
 -	"scriptfile=u-boot.scr\0" \
 +	"scriptfile=boot.scr\0" \
@@ -64,5 +64,5 @@ index 1174dc3bdc..47262fabd5 100644
  		   "then source ${scriptaddr}:script; fi\0" \
  	"nandroot=ubi0:rootfs\0" \
 -- 
-2.17.1
+2.32.0
 
