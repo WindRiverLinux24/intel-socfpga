@@ -23,7 +23,7 @@ new file mode 100644
 index 0000000000..a4a73498b8
 --- /dev/null
 +++ b/configs/socfpga_stratix10_mmc_defconfig
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,95 @@
 +CONFIG_ARM=y
 +CONFIG_SPL_LDSCRIPT="arch/arm/mach-socfpga/u-boot-spl-soc64.lds"
 +CONFIG_ARCH_SOCFPGA=y
@@ -118,6 +118,7 @@ index 0000000000..a4a73498b8
 +CONFIG_FAT_WRITE=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
++CONFIG_SYS_LOAD_ADDR=0x02000000
 -- 
 2.17.1
 
