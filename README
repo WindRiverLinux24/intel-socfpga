@@ -1109,49 +1109,7 @@ and then run below commands to boot up system.
 
 After system boots up, verify FPGA GPIO feature with below sections.
 
-14.1.2.1 FPGA DIPSW
--------------------
-
-Determine the GPIO numbers for the DIPSWs with below command
-
-	# grep -r "gpio@1070" /sys/class/gpio/gpiochip*/label
-	/sys/class/gpio/gpiochip416/label:/soc/gpio@1070
-	This means that the GPIOs 416...419 are allocated to the DIPSWs.
-
-Get DIPSWs value
-
-	# echo 416 > /sys/class/gpio/export
-	# echo in > /sys/class/gpio/gpio416/direction
-	# cat /sys/class/gpio/gpio416/value
-	1
-	set SW3.1 as on status
-	# cat /sys/class/gpio/gpio416/value
-	0
-
-User also can test SW3.2~SW3.4 with above steps
-
-14.1.2.2 FPGA BUTTON
---------------------
-
-Determine the GPIO numbers for the BUTTONs with below command
-
-	# grep -r "gpio@1060" /sys/class/gpio/gpiochip*/label
-	/sys/class/gpio/gpiochip448/label:/soc/gpio@1060
-	This means that the GPIOs 448...451 are allocated to the push BUTTONs.
-
-Get BUTTONs value
-
-	# echo 448 > /sys/class/gpio/export
-	# echo in > /sys/class/gpio/gpio448/direction
-	# cat /sys/class/gpio/gpio448/value
-	1
-	keep S4 as push down status while read the value of gpio448
-	# cat /sys/class/gpio/gpio448/value
-	0
-
-User also can test S5~S7 with above steps
-
-14.1.2.3 FPGA LED
+14.1.2.1 FPGA LED
 -----------------
 
 Run below command to turn on/off the FPGA LEDs.
@@ -1221,49 +1179,7 @@ and then run below commands to boot up system.
 
 After system boots up, verify FPGA GPIO feature with below sections.
 
-14.2.2.1 FPGA DIPSW
--------------------
-
-Determine the GPIO numbers for the DIPSWs with below command
-
-	# grep -r "gpio@1070" /sys/class/gpio/gpiochip*/label
-	/sys/class/gpio/gpiochip416/label:/soc/gpio@1070
-	This means that the GPIOs 416...419 are allocated to the DIPSWs.
-
-Get DIPSWs value
-
-	# echo 416 > /sys/class/gpio/export
-	# echo in > gpio416/direction
-	# cat /sys/class/gpio/gpio416/value
-	1
-	set SW2.1 as on status
-	# cat /sys/class/gpio/gpio416/value
-	0
-
-User also can test SW2.2~SW2.4 with above steps
-
-14.2.2.2 FPGA BUTTON
---------------------
-
-Determine the GPIO numbers for the BUTTONs with below command
-
-	# grep -r "gpio@1060" /sys/class/gpio/gpiochip*/label
-	/sys/class/gpio/gpiochip448/label:/soc/gpio@1060
-	This means that the GPIOs 448...451 are allocated to the push BUTTONs.
-
-Get BUTTONs value
-
-	# echo 448 > /sys/class/gpio/export
-	# echo in > gpio448/direction
-	# cat /sys/class/gpio/gpio448/value
-	1
-	keep S1 as push down status while read the value of gpio448
-	# cat /sys/class/gpio/gpio448/value
-	0
-
-User also can test S2~S4 with above steps
-
-14.2.2.3 FPGA LED
+14.2.2.1 FPGA LED
 -----------------
 
 Run below command to turn on/off the FPGA LEDs.
