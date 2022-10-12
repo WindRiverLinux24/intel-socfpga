@@ -15,7 +15,6 @@ SRC_URI:append:intel-socfpga-64 = " \
 	file://0001-drivers-watchdog-restore-watchdog-default-timeout-va.patch \
 	file://0001-include-configs-socfpga-set-mtd3-as-the-default-nand.patch \
 	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
-	file://0001-Revert-HSD-15010938416-arm-dts-soc64-changing-DDR-al.patch \
 "
 
 inherit deploy
