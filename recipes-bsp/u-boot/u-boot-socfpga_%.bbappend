@@ -15,7 +15,8 @@ SRC_URI:append:intel-socfpga-64 = " \
 	file://0001-drivers-watchdog-restore-watchdog-default-timeout-va.patch \
 	file://0001-include-configs-socfpga-set-mtd3-as-the-default-nand.patch \
 	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
-	${@bb.utils.contains('DISTRO_FEATURES', 'ostree', 'file://0001-u-boot-socfpga-fix-boot-from-script-boot.scr-failed.patch', '', d)}  \
+	file://0001-u-boot-socfpga-fix-boot-from-script-boot.scr-failed.patch \
+	file://0001-Rename-boot-script-when-ostree-is-not-enabled.patch \
 "
 
 inherit deploy

@@ -1,0 +1,59 @@
+From 8634be5872df6538d5b7a499526b1658e538836c Mon Sep 17 00:00:00 2001
+From: Changqing Li <changqing.li@windriver.com>
+Date: Wed, 12 Apr 2023 15:26:53 +0800
+Subject: [PATCH] Rename boot script when ostree is not enabled
+
+ostree use boot.scr as boot script, when ostree is not enabled, use
+u-boot.scr as boot script to make behavior of run fatscript aligned no
+matter ostree is enable or not.
+
+Signed-off-by: Changqing Li <changqing.li@windriver.com>
+---
+ configs/socfpga_stratix10_mmc_defconfig | 2 +-
+ include/configs/socfpga_soc64_common.h  | 9 ++++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/configs/socfpga_stratix10_mmc_defconfig b/configs/socfpga_stratix10_mmc_defconfig
+index 2bca280b3c..25da042d9f 100644
+--- a/configs/socfpga_stratix10_mmc_defconfig
++++ b/configs/socfpga_stratix10_mmc_defconfig
+@@ -22,7 +22,7 @@ CONFIG_BOOTDELAY=5
+ CONFIG_USE_BOOTARGS=y
+ CONFIG_BOOTARGS="earlycon panic=-1"
+ CONFIG_USE_BOOTCOMMAND=y
+-CONFIG_BOOTCOMMAND="run fatscript;run mmcload;run linux_qspi_enable;run rsu_status;run mmcboot"
++CONFIG_BOOTCOMMAND="run fatscript;run ostree_script;run mmcload;run linux_qspi_enable;run rsu_status;run mmcboot"
+ # CONFIG_SPL_RAW_IMAGE_SUPPORT is not set
+ CONFIG_SPL_CRC32_SUPPORT=y
+ CONFIG_SPL_CRC32=y
+diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
+index 350cfecd9f..24c9206904 100755
+--- a/include/configs/socfpga_soc64_common.h
++++ b/include/configs/socfpga_soc64_common.h
+@@ -174,7 +174,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+ 		" else fdt set /clocks/qspi-clk clock-frequency" \
+ 		" ${qspi_clock}; echo QSPI clock frequency updated; fi; fi\0" \
+ 	"scriptaddr=0x05FF0000\0" \
+-	"scriptfile=boot.scr\0" \
++	"scriptfile=u-boot.scr\0" \
+ 	"nandroot=ubi0:rootfs\0" \
+ 	"socfpga_legacy_reset_compat=1\0" \
+ 	"rsu_status=rsu dtb; rsu display_dcmf_version; "\
+@@ -230,9 +230,12 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
+ 		" else fdt set /clocks/qspi-clk clock-frequency" \
+ 		" ${qspi_clock}; echo QSPI clock frequency updated; fi; fi\0" \
+ 	"scriptaddr=0x02100000\0" \
+-	"scriptfile=boot.scr\0" \
++	"scriptfile=u-boot.scr\0" \
++	"ostree_scriptfile=boot.scr\0" \
+ 	"fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};" \
+-		   "then source ${scriptaddr}:script; fi\0" \
++		"then source ${scriptaddr}:script; fi\0" \
++	"ostree_script=if test -e mmc 0:1 ${ostree_scriptfile}; then fatload mmc 0:1 ${scriptaddr} ${ostree_scriptfile};" \
++		"source ${scriptaddr}:script; fi\0" \
+ 	"nandroot=ubi0:rootfs\0" \
+ 	"nandload=ubi part root; ubi readvol ${loadaddr} kernel; ubi readvol ${fdt_addr} dtb\0" \
+ 	"nandboot=setenv bootargs " CONFIG_BOOTARGS \
+-- 
+2.25.1
+
