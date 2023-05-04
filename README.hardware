@@ -24,6 +24,7 @@ This BSP supports the following boards:
   - 2021/06 (LINUXPG-709) Linux-10.21 RCPL01: Add Intel Stratix 10 SOCFPGA board support
   - 2022/06 (LINUXPG-1159) Linux-10.22 RCPL01: Add Intel Agilex SOCFPGA board support
   - 2022/07 (LINUXPG-1158) Linux-10.22 RCPL01: Add Intel Stratix 10 SOCFPGA board support
+  - 2023/05 (LINUXPG-1595) Linux-10.22 RCPL09: Align with latest Intel SDK kernel version 5.15.100
 
 3. BSP Features
 ===============
@@ -87,7 +88,7 @@ The following features are not supported and validated:
 4.1 Stratix 10 SOCFPGA
 ======================
 
-4.1.1 Validated Board Info(bootloader v2022.01)
+4.1.1 Validated Board Info(bootloader v2022.04)
 -----------------------------------------------
 
 This BSP is only validated in the following environment. If you use this
@@ -98,15 +99,15 @@ Preloader
 
 	Board:	               Intel SOCFPGA Stratix 10 Board
 	BootLoader:            U-Boot SPL
-	BootLoader Version:    U-Boot SPL 2022.01 (May 20 2022 - 01:34:26 +0000)
+	BootLoader Version:    U-Boot SPL 2022.04 (Nov 10 2022 - 03:07:42 +0000)
 
 Arm Trust Firmware
 ------------------
 
 	Board:	               Intel SOCFPGA Stratix 10 Board
 	BootLoader: 	       BL31
-	BootLoader Version:    v2.6.0(release):rel_socfpga_v2.6.0_22.04.02_pr
-			       Built : 02:19:16, Apr  6 2022
+	BootLoader Version:    v2.7.0(release):QPDS22.1STD_REL_GSRD_PR
+			       Built : 05:59:58, Oct 21 2022
 
 Bootloader
 ----------
@@ -115,7 +116,7 @@ Bootloader
 	Board:	               Intel SOCFPGA Stratix 10 Board
 	Board Revision:        Rev B0 devkit
 	BootLoader:            U-Boot
-	BootLoader Version:    U-Boot 2022.01 (May 20 2022 - 01:34:26 +0000)socfpga_stratix10
+	BootLoader Version:    U-Boot 2022.04 (Nov 10 2022 - 03:07:42 +0000)socfpga_stratix10
 
 4.1.2 Known hardware Issues
 ---------------------------
@@ -136,15 +137,15 @@ Preloader
 
 	Board:	               Intel SOCFPGA Agilex Board
 	BootLoader:            U-Boot SPL
-	BootLoader Version:    U-Boot SPL 2022.01 (May 20 2022 - 01:34:26 +0000)
+	BootLoader Version:    U-Boot SPL 2022.04 (Nov 10 2022 - 03:07:42 +0000)
 
 Arm Trust Firmware
 ------------------
 
 	Board:	               Intel SOCFPGA Agilex Board
 	BootLoader: 	       BL31
-	BootLoader Version:    v2.6.0(release):rel_socfpga_v2.6.0_22.04.02_pr
-			       Built : 02:19:16, Apr 6 2022
+	BootLoader Version:    v2.7.0(release):QPDS22.1STD_REL_GSRD_PR
+			       Built : 05:59:58, Oct 21 2022
 
 Bootloader
 ----------
@@ -153,7 +154,7 @@ Bootloader
 	Board:	               Intel SOCFPGA Agilex Board
 	Board Revision:        Rev A devkit
 	BootLoader:            U-Boot
-	BootLoader Version:    U-Boot 2022.01 (May 20 2022 - 01:34:26 +0000)socfpga_agilex
+	BootLoader Version:    U-Boot 2022.04 (Nov 10 2022 - 03:07:42 +0000)socfpga_agilex
 
 4.2.2 Known hardware Issues
 ---------------------------
