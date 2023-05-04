@@ -75,12 +75,19 @@ the corresponding h/w features exist.
     + Remote System Update
     + Memory ECC
 
-2.2 Unsupported Features
+3.2 Unsupported Features
 ========================
 
 The following features are not supported and validated:
 
     x HSMC interface
+
+3.3 Known Issues
+================
+
+1) Network performance will reduce after flood ping on both Stratix and Agilex board,
+   This will happen on both rgmii and sgmii mode, a work-around for this issue is to
+   add stmmaceth=chain_mode:1 to boot command line when boot.
 
 4. BSP Notes
 ============
