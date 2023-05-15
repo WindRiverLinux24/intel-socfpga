@@ -1497,10 +1497,7 @@ implement system suspend both in legacy and atf mode bootloader. So, they can on
 Detail example as below, using serial to wakeup system.
 
 	# echo s2idle > /sys/power/mem_sleep
-	For Stratix10 platform
 	# echo enabled > /sys/bus/platform/drivers/dw-apb-uart/ffc02000.serial/tty/ttyS0/power/wakeup
-	For Agilex platform
-	# echo enabled > /sys/bus/platform/drivers/dw-apb-uart/ffc02000.serial0/tty/ttyS0/power/wakeup
 	# echo mem > /sys/power/state
 	system enter suspend status
 	press any key to wake up system
