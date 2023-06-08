@@ -74,7 +74,7 @@ along with patch descriptions, use git to see what changed on the default
 kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
 
   # cd tmp-glibc/work-shared/<bsp_name>/kernel-source
-  # git whatchanged standard/base..v5.15/standard/intel-sdk-5.15/intel-socfpga
+  # git whatchanged v6.1/standard/base..v6.1/standard/intel-sdk-6.1/intel-socfpga
 
 
 4. Boot Instructions
@@ -609,7 +609,7 @@ with just P1 being used, there are no errors, and the currently loaded image is 
 	SOCFPGA_STRATIX10 # rsu update 0x0110000
 
 	RSU: RSU update to 0x0000000000110000
-	U-Boot SPL 2021.07 (Jan 18 2022 - 03:11:45 +0000)
+	U-Boot SPL 2022.10 (Mar 20 2023 - 03:03:15 +0000)
 	Reset state: Cold
 	MPU         1000000 kHz
 	L3 main     400000 kHz
@@ -626,7 +626,7 @@ with just P1 being used, there are no errors, and the currently loaded image is 
 	For Agilex platform
 	SOCFPGA_AGILEX # rsu update 0x0210000
 
-	U-Boot SPL 2021.07 (Jan 21 2022 - 05:01:39 +0000)
+	U-Boot SPL 2022.10 (Mar 20 2023 - 03:03:15 +0000)
 	Reset state: Cold
 	MPU          1200000 kHz
 	L4 Main       400000 kHz
@@ -830,7 +830,7 @@ The status is basically as before, just that the currently running image is now 
 9) Power cycle the board, boot system. And then display the status,
    it will show the P2 image running, as expected:
 	# rsu_client --log
-	      VERSION: 0x00000000
+	      VERSION: 0x00000202
 		STATE: 0x00000000
 	CURRENT IMAGE: 0x0000000002000000
 	   FAIL IMAGE: 0x0000000000000000
@@ -847,7 +847,7 @@ The status is basically as before, just that the currently running image is now 
 
 12) Log in system, And then display the RSU status:
 	# rsu_client --log
-	      VERSION: 0x00000000
+	      VERSION: 0x00000202
 		STATE: 0x00000000
 	CURRENT IMAGE: 0x0000000003000000
 	   FAIL IMAGE: 0x0000000000000000
@@ -1432,9 +1432,9 @@ Run the debugger script with below command, using the connection parameters repo
 	# cd fpga_image
 	# mkdir u-boot-socfpga
 	# mkdir u-boot-socfpga/spl
-	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.01+gitAUTOINC+f75f1833a5-r0/build/socfpga_agilex_nand_defconfig/u-boot.itb ./u-boot-socfpga
-	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.01+gitAUTOINC+f75f1833a5-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl ./u-boot-socfpga/spl
-	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.01+gitAUTOINC+f75f1833a5-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl-dtb.bin ./u-boot-socfpga/spl
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.10+gitAUTOINC+61ae22e548-r0/build/socfpga_agilex_nand_defconfig/u-boot.itb ./u-boot-socfpga
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.10+gitAUTOINC+61ae22e548-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl ./u-boot-socfpga/spl
+	# cp <project dir>build/tmp-glibc/work/intel_socfpga_64-wrs-linux/u-boot-socfpga/1_v2022.10+gitAUTOINC+61ae22e548-r0/build/socfpga_agilex_nand_defconfig/spl/u-boot-spl-dtb.bin ./u-boot-socfpga/spl
 	# <path-to-developmentstudio>/arm/developmentstudio-2021.1/bin/armdbg  \
 	  --cdb-entry="Intel SoC FPGA::Agilex SoC::Bare Metal Debug::Bare Metal Debug::Cortex-A53x4 SMP::Intel FPGA Download Cable"  \
 	  --cdb-entry-param="rvi_address=Agilex SI/SoC Dev Kit on localhost [1-1]:Agilex SI/SoC Dev Kit 1-1"  \
