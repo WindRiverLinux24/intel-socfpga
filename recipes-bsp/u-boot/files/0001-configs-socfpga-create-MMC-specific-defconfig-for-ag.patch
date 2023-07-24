@@ -23,7 +23,7 @@ new file mode 100644
 index 0000000000..b8c9197742
 --- /dev/null
 +++ b/configs/socfpga_agilex_mmc_defconfig
-@@ -0,0 +1,108 @@
+@@ -0,0 +1,109 @@
 +CONFIG_ARM=y
 +CONFIG_SPL_LDSCRIPT="arch/arm/mach-socfpga/u-boot-spl-soc64.lds"
 +CONFIG_ARCH_SOCFPGA=y
