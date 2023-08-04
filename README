@@ -966,7 +966,7 @@ and then run below commands to boot up system.
 After system boots up, execute the following commands to verify PCIe interface:
 
 	# ifconfig
-	# dhclient eth1
+	# dhcpcd eth1
 	# ping <ip address> -I eth1 -c 5
 
 Note: When run PCIe feature, please use socfpga_stratix10_socdk_pcie.dtb file.
@@ -1010,7 +1010,7 @@ and then run below commands to boot up system.
 				  ip=<target IP>::<gateway>:<netmask>::eth0:off
 	SOCFPGA_STRATIX10 # booti 0x2000000 - 0x8000000
 
-After system boots up, execute the following commands to verify PCIe interface:
+After system boots up, execute the following commands to verify sgmii interface:
 
 	# ifconfig -a
 	# dhcpcd eth1
