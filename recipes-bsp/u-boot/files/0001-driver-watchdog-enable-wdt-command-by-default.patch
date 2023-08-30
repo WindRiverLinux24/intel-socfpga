@@ -1,4 +1,4 @@
-From 3154b25f4a5c46c75e1e8dd65a29a375caf17059 Mon Sep 17 00:00:00 2001
+From c5537390e8062ac250d76a321ff44dcfeac735be Mon Sep 17 00:00:00 2001
 From: Meng Li <Meng.Li@windriver.com>
 Date: Tue, 21 Dec 2021 18:02:24 +0800
 Subject: [PATCH] driver: watchdog: enable wdt command by default
@@ -13,29 +13,29 @@ Signed-off-by: Meng Li <Meng.Li@windriver.com>
  2 files changed, 2 insertions(+)
 
 diff --git a/configs/socfpga_agilex_defconfig b/configs/socfpga_agilex_defconfig
-index b4f4251bf2..adf02a70ed 100644
+index e4151b33ddfd..db65728599d5 100644
 --- a/configs/socfpga_agilex_defconfig
 +++ b/configs/socfpga_agilex_defconfig
-@@ -45,6 +45,7 @@ CONFIG_CMD_NAND_LOCK_UNLOCK=y
+@@ -59,6 +59,7 @@ CONFIG_CMD_NAND_LOCK_UNLOCK=y
  CONFIG_CMD_SPI=y
  CONFIG_CMD_USB=y
  CONFIG_CMD_CACHE=y
 +CONFIG_CMD_WDT=y
+ CONFIG_SPL_SPI_FLASH_MTD=y
+ CONFIG_SPI_FLASH_MTD=y
  CONFIG_MTDIDS_DEFAULT="nand0=ffb90000.nand.0"
- CONFIG_MTDPARTS_DEFAULT="mtdparts=ffb90000.nand.0:2m(u-boot),-(root)"
- CONFIG_CMD_UBI=y
 diff --git a/configs/socfpga_stratix10_defconfig b/configs/socfpga_stratix10_defconfig
-index a63cfeaa44..b7eed6fbdb 100644
+index f8d19845a36c..0c71c183928d 100644
 --- a/configs/socfpga_stratix10_defconfig
 +++ b/configs/socfpga_stratix10_defconfig
-@@ -45,6 +45,7 @@ CONFIG_CMD_NAND_LOCK_UNLOCK=y
+@@ -59,6 +59,7 @@ CONFIG_CMD_NAND_LOCK_UNLOCK=y
  CONFIG_CMD_SPI=y
  CONFIG_CMD_USB=y
  CONFIG_CMD_CACHE=y
 +CONFIG_CMD_WDT=y
+ CONFIG_SPL_SPI_FLASH_MTD=y
+ CONFIG_SPI_FLASH_MTD=y
  CONFIG_MTDIDS_DEFAULT="nand0=ffb90000.nand.0"
- CONFIG_MTDPARTS_DEFAULT="mtdparts=ffb90000.nand.0:2m(u-boot),-(root)"
- CONFIG_CMD_UBI=y
 -- 
-2.17.1
+2.35.5
 
