@@ -87,6 +87,9 @@ The following features are not supported and validated:
    This will happen on both rgmii and sgmii mode, a work-around for this issue is to
    add stmmaceth=chain_mode:1 to boot command line when boot.
 
+2) CPU hotplug feature doesn't support for stopping CPU0, only CPU1~3 are able to be
+   disabled and enabled.
+
 4. BSP Notes
 ============
 
