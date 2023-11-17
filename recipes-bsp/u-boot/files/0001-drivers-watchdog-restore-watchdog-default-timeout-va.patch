@@ -1,4 +1,4 @@
-From 4e04078b72c4a30ee184fffc173839470195e334 Mon Sep 17 00:00:00 2001
+From 31a9c485636ebbfe3370626dd3ac40dc606b48b8 Mon Sep 17 00:00:00 2001
 From: Meng Li <Meng.Li@windriver.com>
 Date: Tue, 8 Feb 2022 10:13:15 +0800
 Subject: [PATCH] drivers: watchdog: restore watchdog default timeout value to
@@ -18,18 +18,18 @@ Signed-off-by: Meng Li <Meng.Li@windriver.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index b48482cb574f..1177f17fd8a2 100644
+index 13373f599b46..b5ac8f7f50dc 100644
 --- a/drivers/watchdog/Kconfig
 +++ b/drivers/watchdog/Kconfig
-@@ -27,7 +27,7 @@ config WATCHDOG_TIMEOUT_MSECS
+@@ -28,7 +28,7 @@ config WATCHDOG_TIMEOUT_MSECS
  	int "Watchdog timeout in msec"
  	default 128000 if ARCH_MX31 || ARCH_MX5 || ARCH_MX6
  	default 128000 if ARCH_MX7 || ARCH_VF610
 -	default 10000 if ARCH_SOCFPGA
 +	default 30000 if ARCH_SOCFPGA
  	default 16000 if ARCH_SUNXI
+ 	default 5376 if ULP_WATCHDOG
  	default 60000
- 	help
 -- 
-2.17.1
+2.35.5
 
