@@ -3,6 +3,7 @@ do_image_wic[postfuncs] += "intel_socfpga_wic"
 intel_socfpga_wic() {
 	# Create Stratix10 and Agilex wic image separately
 	for config in stratix10 agilex; do
+		WIC_FULL_NAME=${IMAGE_LINK_NAME}-${config}${IMAGE_VERSION_SUFFIX}${IMAGE_NAME_SUFFIX}
 		cd "${DEPLOY_DIR_IMAGE}"
 
 		for file_name in u-boot.img u-boot-dtb.img u-boot.itb; do
@@ -18,14 +19,16 @@ intel_socfpga_wic() {
 			fi
 		done 
 
-		cp ${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.wic ${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}-${config}.wic
+		cp ${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.wic ${IMGDEPLOYDIR}/${WIC_FULL_NAME}.wic
 
 		for file_name in u-boot.img u-boot-dtb.img u-boot.itb; do
-			wic cp ${file_name} ${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}-${config}.wic:1/
+			wic cp ${file_name} ${IMGDEPLOYDIR}/${WIC_FULL_NAME}.wic:1/
 		done
 
 		cd "${IMGDEPLOYDIR}"
-		bmaptool create "${IMAGE_LINK_NAME}-${config}.wic" -o "${IMAGE_LINK_NAME}-${config}.wic.bmap"
+		bmaptool create "${WIC_FULL_NAME}.wic" -o "${WIC_FULL_NAME}.wic.bmap"
+		ln -sf ${WIC_FULL_NAME}.wic.bmap ${IMAGE_LINK_NAME}-${config}.wic.bmap
+		ln -sf ${WIC_FULL_NAME}.wic ${IMAGE_LINK_NAME}-${config}.wic
 	done
 
 	# Remove the default wic file
