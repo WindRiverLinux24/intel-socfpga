@@ -1,0 +1,30 @@
+From 94780706b5474b6d0b9b4337dd03decfacb9ec6b Mon Sep 17 00:00:00 2001
+From: Anders Hedlund <anders.hedlund@windriver.com>
+Date: Tue, 28 Nov 2023 13:51:06 +0100
+Subject: [PATCH] fcs_prepare: Use dynamic linking
+
+Switch to dynamic linking to support build on RHEL7/8 hosts.
+
+Upstream-Status: Inappropriate [WRLinux specific]
+
+Signed-off-by: Anders Hedlund <anders.hedlund@windriver.com>
+Signed-off-by: Liwei Song <liwei.song@windriver.com>
+---
+ Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index dd246df..4371964 100644
+--- a/Makefile
++++ b/Makefile
+@@ -16,7 +16,6 @@ NETTLE_OBJ := $(NETTLE_SRC:$(NETTLE_SRC_DIR)/%.c=$(NETTLE_OBJ_DIR)/%.o)
+ 
+ CPPFLAGS += -Iinclude -Inettle/include
+ CFLAGS += -Wall
+-LDFLAGS := -static
+ 
+ .PHONY: all clean
+ 
+-- 
+2.19.1
+

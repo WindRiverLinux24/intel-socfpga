@@ -1,0 +1,51 @@
+From 16f149565fb4d8bcc7b59838c23bf4f372cb1417 Mon Sep 17 00:00:00 2001
+From: Per Geil <per.geil@tieto.com>
+Date: Wed, 8 Jul 2020 11:26:30 +0000
+Subject: [PATCH] fcs_prepare building in Yocto environment
+
+Upstream-Status: Inappropriate [WRLinux specific]
+
+Signed-off-by: Per Geil <per.geil@tieto.com>
+Signed-off-by: Liwei Song <liwei.song@windriver.com>
+---
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f205c46..dd246df 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,8 +14,8 @@ OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+ NETTLE_SRC := $(wildcard ${NETTLE_SRC_DIR}/*.c)
+ NETTLE_OBJ := $(NETTLE_SRC:$(NETTLE_SRC_DIR)/%.c=$(NETTLE_OBJ_DIR)/%.o)
+ 
+-CPP_FLAGS := -Iinclude -Inettle/include
+-CFLAGS := -Wall
++CPPFLAGS += -Iinclude -Inettle/include
++CFLAGS += -Wall
+ LDFLAGS := -static
+ 
+ .PHONY: all clean
+@@ -23,16 +23,16 @@ LDFLAGS := -static
+ all: $(EXE)
+ 
+ $(EXE): $(OBJ) $(NETTLE_OBJ)
+-	gcc $(LDFLAGS) $^ $(LDLIBS) -o $@
++	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+ 
+ #$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(NETTLE_SRC_DIR)/%.c | $(OBJ_DIR)
+ #	gcc $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
+ 
+ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+-	gcc $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+ 
+ $(NETTLE_OBJ_DIR)/%.o: $(NETTLE_SRC_DIR)/%.c | $(NETTLE_OBJ_DIR)
+-	gcc $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+ 
+ $(OBJ_DIR):
+ 	mkdir $@
+-- 
+2.18.1
+
