@@ -26,7 +26,7 @@ index e10f8e1757..701bd6aba3 100644
 +&atf_blob {
 +	filename = "bl31-stratix10.bin";
 +};
-+#elif defined(CONFIG_TARGET_SOCFPGA_AGILEX_SOCDK)
++#elif defined(CONFIG_TARGET_SOCFPGA_AGILEX_SOCDK) && !defined(CONFIG_SOCFPGA_SECURE_VAB_AUTH)
 +&atf_blob {
 +	filename = "bl31-agilex.bin";
 +};
