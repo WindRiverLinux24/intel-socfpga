@@ -1,0 +1,52 @@
+From 36c39a4b1c92564baa4c601069590f60d3460390 Mon Sep 17 00:00:00 2001
+From: Per Geil <per.geil@tieto.com>
+Date: Wed, 8 Jul 2020 11:01:49 +0000
+Subject: [PATCH] fcs-client building in Yocto environment
+
+Upstream-Status: Inappropriate [WRLinux specific]
+
+Signed-off-by: Per Geil <per.geil@tieto.com>
+Signed-off-by: Liwei Song <liwei.song@windriver.com>
+
+---
+ Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 471e494..406d184 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,24 +19,24 @@ FITOBJ := $(FITSRC:$(FITSRC_DIR)/%.c=$(FITOBJ_DIR)/%.o)
+ NETTLE_SRC := $(wildcard ${NETTLE_SRC_DIR}/*.c)
+ NETTLE_OBJ := $(NETTLE_SRC:$(NETTLE_SRC_DIR)/%.c=$(NETTLE_OBJ_DIR)/%.o)
+ 
+-CPP_FLAGS := -Iinclude -Iinclude/uboot -Iinclude/tools -Iinclude/libfdt -Iinclude/linux -Inettle/include -DUSE_HOSTCC
+-CFLAGS := -Wall
++CPPFLAGS += -Iinclude -Iinclude/uboot -Iinclude/tools -Iinclude/libfdt -Iinclude/linux -Inettle/include -DUSE_HOSTCC
++CFLAGS += -Wall
+ 
+ .PHONY: all clean
+ 
+ all: $(EXE)
+ 
+ $(EXE): $(OBJ) $(FITOBJ) $(NETTLE_OBJ)
+-	$(CROSS_COMPILE)gcc $(LDFLAGS) $^ $(LDLIBS) -o $@
++	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+ 
+ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+-	$(CROSS_COMPILE)gcc $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+ 
+ $(FITOBJ_DIR)/%.o: $(FITSRC_DIR)/%.c | $(FITOBJ_DIR)
+-	$(CROSS_COMPILE)gcc $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+ 
+ $(NETTLE_OBJ_DIR)/%.o: $(NETTLE_SRC_DIR)/%.c | $(NETTLE_OBJ_DIR)
+-	$(CROSS_COMPILE)gcc $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
++	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+ 
+ $(OBJ_DIR):
+ 	mkdir $@
+-- 
+2.18.1
+
