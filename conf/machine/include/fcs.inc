@@ -1,0 +1,6 @@
+FCS_KEY_DIR ?= "${TMPDIR}/fcs_keydir"
+ROOT_KEY ?= "${FCS_KEY_DIR}/root0.qky"
+HPS_PRIVATE_KEY ?= "${FCS_KEY_DIR}/software0.pem"
+HPS_SIGNATURE_CHAIN ?= "${FCS_KEY_DIR}/software0_cancel3.qky"
+FPGA_PRIVATE_KEY ?= "${FCS_KEY_DIR}/sign0.pem"
+FPGA_SIGNATURE_CHAIN ?= "${FCS_KEY_DIR}/sign0_cancel1.qky"

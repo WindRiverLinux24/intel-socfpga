@@ -1,0 +1,54 @@
+From bfa047d31e8dd4d3339254511d14979accbe70f4 Mon Sep 17 00:00:00 2001
+From: Liwei Song <liwei.song@windriver.com>
+Date: Wed, 20 Mar 2024 04:06:19 +0000
+Subject: [PATCH] arm: dts: socfpga: remove prefix signed-
+
+With this "signed-" prefix, default build for
+socfpga_agilex_vab_defconfig will be failed, since it requires signed
+images, the default build system only can create images without "signed-"
+like u-boot.dtb, u-boot-nodtb.bin, we will sign the images separately
+and regenerate u-boot.itb and kernel.itb.
+
+Upstream-Status: Inappropriate [WRLinux specific]
+
+Signed-off-by: Liwei Song <liwei.song@windriver.com>
+---
+ arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi b/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi
+index 3196526f8cc6..b2be2c1a46c1 100644
+--- a/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi
++++ b/arch/arm/dts/socfpga_soc64_fit-u-boot.dtsi
+@@ -149,23 +149,23 @@
+ 
+ #if defined(CONFIG_SOCFPGA_SECURE_VAB_AUTH)
+ &uboot_blob {
+-	filename = "signed-u-boot-nodtb.bin";
++	filename = "u-boot-nodtb.bin";
+ };
+ 
+ &atf_blob {
+-	filename = "signed-bl31.bin";
++	filename = "bl31-agilex-vab.bin";
+ };
+ 
+ &fdt_0_blob {
+-	filename = "signed-u-boot.dtb";
++	filename = "u-boot.dtb";
+ };
+ 
+ &kernel_blob {
+-	filename = "signed-Image";
++	filename = "Image";
+ };
+ 
+ &kernel_fdt_blob {
+-	filename = "signed-linux.dtb";
++	filename = "linux.dtb";
+ };
+ #endif
+ 
+-- 
+2.35.5
+
