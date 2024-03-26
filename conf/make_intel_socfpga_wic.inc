@@ -2,7 +2,9 @@ do_image_wic[postfuncs] += "intel_socfpga_wic"
 
 intel_socfpga_wic() {
 	# Create Stratix10 and Agilex wic image separately
-	for config in stratix10 agilex; do
+	for config in ${UBOOT_CONFIG}; do
+		[ "$config" = "agilex-socdk-nand" ] && continue
+		[ "$config" = "agilex-socdk-vab-mmc" ] && ${@bb.utils.contains('MACHINE_FEATURES', 'fcs', 'false', 'true', d)} && continue
 		WIC_FULL_NAME=${IMAGE_LINK_NAME}-${config}${IMAGE_VERSION_SUFFIX}${IMAGE_NAME_SUFFIX}
 		cd "${DEPLOY_DIR_IMAGE}"
 
@@ -11,11 +13,11 @@ intel_socfpga_wic() {
 				rm -rf ${file_name}
 			fi
 			if [ "$file_name" = "u-boot.itb" ];then
-				ln -sf u-boot-${config}-socdk-mmc.itb ${file_name}
+				ln -sf u-boot-${config}.itb ${file_name}
 			elif [ "$file_name" = "u-boot-dtb.img" ];then
-				ln -sf u-boot-dtb-${config}-socdk-mmc.img ${file_name}
+				ln -sf u-boot-dtb-${config}.img ${file_name}
 			else
-				ln -sf u-boot-${config}-socdk-mmc.img ${file_name}
+				ln -sf u-boot-${config}.img ${file_name}
 			fi
 		done 
 
