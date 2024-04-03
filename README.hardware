@@ -21,6 +21,8 @@ This BSP supports the following boards:
 2. Change History
 =================
 
+  - 2024/04 (LINUXPG-2087) Add FCS support for Agilex7-F board
+  - 2024/04 (LINUXPG-2086) Bump kernel to SDK v6.1.55
   - 2023/06 (LINUXPG-1583) Linux-10.23 RCPL01: Add Intel Agilex SOCFPGA board support
   - 2023/06 (LINUXPG-1584) Linux-10.23 RCPL01: Add Intel Stratix 10 SOCFPGA board support
 

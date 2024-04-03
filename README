@@ -1503,3 +1503,78 @@ Detail example as below, using serial to wakeup system.
 	press any key to wake up system
 
 Note: add no_console_suspend in bootargs if using serial to wakeup system.
+
+18.FPGA crypto service(FCS)(Agilex7-F MMC only)
+===============================================
+
+18.1 Build FCS images
+---------------------
+
+To enable FCS feature, please add the following configuration parameter when setup project:
+
+    --template=feature/intel-fcs
+
+The required tool for FCS feature is Quartus, refer section 9.1 to install it to your build server
+and apply the correct License for it, the recommended version is "23.2", which aligns with GHRD version,
+After that, specify Quartus shell through "QUARTUS_SHELL" in conf/local.conf
+
+	QUARTUS_SHELL = "[Quartus-install-dir]/23.2/nios2eds/nios2_command_shell.sh"
+
+Build image directly by running:
+
+	bitbake wrlinux-image-std
+
+After that, you will find fcs wic image in below path, write it to mmc card directly with "dd" command.
+
+	tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-agilex-socdk-vab-mmc.wic
+
+You can also use you own keys to sign images through "FCS_KEY_DIR" in conf/local.conf,
+it specifies where the key files are stored. If "FCS_KEY_DIR" is not specified, you will find the default key
+in:
+
+tmp-glibc/fcs_keydir/
+├── root0.pem
+├── root0_public.pem
+├── root0.qky
+├── sign0_cancel1.qky
+├── sign0.pem
+├── sign0_public.pem
+├── software0_cancel3.qky
+├── software0.pem
+└── software0_public.pem
+
+18.2 Build and flash FPGA images
+--------------------------------
+
+FPGA images can be built from GHRD(golden hardware reference design), you need to get the License
+from Intel, so you need to build it manually by adding below parameters in conf/local.conf:
+
+	BB_NO_NETWORK = '0'
+	CUSTOMER_RECIPES:intel-socfpga += 'ghrd-socfpga'
+
+Then run:
+	bitbake ghrd-socfpga
+
+Once it is done, you will get four fpga images in:
+
+tmp-glibc/deploy/images/intel-socfpga-64/agilex_soc_devkit_ghrd/
+├── ghrd_agfb014r24b2e2v.sof
+├── signed_bitstream_core.rbf
+├── signed_bitstream_hps.rbf
+└── signed_flash.jic
+
+You can run below command in JTAG mode to flash it to board to have a test, this way data will lost when board is reset.
+
+	quartus_pgm -c 1 -m jtag -o "pi;root0.qky" && quartus_pgm -c 1 -m jtag -o "p;signed_bitstream_hps.rbf"
+
+If all things works well, you can flash .jic file to board for long term use:
+
+	quartus_pgm -c 1 -m jtag -o "pvi;signed_flash.jic"
+
+18.3 Notes
+----------
+
+1) If key files are changed, FPGA images, uboot, kernel and kernel dtb are needed to re-sign and re-create,
+and deploy them to board again.
+2) For detail information please refer to:
+https://www.rocketboards.org/foswiki/Documentation/IntelAgilex7SoCSecureBootDemoDesignHPSFirst
