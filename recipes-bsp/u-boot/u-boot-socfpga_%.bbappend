@@ -18,6 +18,7 @@ SRC_URI:append:intel-socfpga-64 = " \
 	file://0001-arch-arm-psci-implement-psci_system_off-interface-fo.patch \
 	file://0001-Rename-boot-script-when-ostree-is-not-enabled.patch \
 	file://0001-arm-dts-socfpga-remove-prefix-signed.patch \
+	file://0001-include-configs-specify-kernel.itb-as-bootfile-for-m.patch \
 "
 
 inherit deploy

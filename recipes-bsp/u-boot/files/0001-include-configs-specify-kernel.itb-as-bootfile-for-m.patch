@@ -1,0 +1,32 @@
+From b487c768f07bdf426e419231908f8a01eb12f73f Mon Sep 17 00:00:00 2001
+From: Liwei Song <liwei.song@windriver.com>
+Date: Tue, 9 Apr 2024 11:39:01 +0800
+Subject: [PATCH] include: configs: specify kernel.itb as bootfile for
+ mmcfitload
+
+By default bootfile is Image, but mmcfitload and mmcfitboot requires
+kernel.itb to boot with. Change to kernel.itb for mmcfitload.
+
+Upstream-Status: Inappropriate [WRLinux specific]
+
+Signed-off-by: Liwei Song <liwei.song@windriver.com>
+---
+ include/configs/socfpga_soc64_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/socfpga_soc64_common.h b/include/configs/socfpga_soc64_common.h
+index ccdfc5efb4cf..a314a396c4a0 100755
+--- a/include/configs/socfpga_soc64_common.h
++++ b/include/configs/socfpga_soc64_common.h
+@@ -239,7 +239,7 @@
+ 		" root=${mmcroot} rw rootwait;" \
+ 		"bootm ${loadaddr}\0" \
+ 	"mmcfitload=mmc rescan;" \
+-		"load mmc 0:1 ${loadaddr} ${bootfile}\0" \
++		"load mmc 0:1 ${loadaddr} kernel.itb\0" \
+ 	"mtdids=" CONFIG_MTDIDS_DEFAULT "\0" \
+ 	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0" \
+ 	"linux_qspi_enable=if sf probe; then " \
+-- 
+1.8.3.1
+
