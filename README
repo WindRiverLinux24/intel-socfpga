@@ -303,6 +303,10 @@ https://rocketboards.org/foswiki/Documentation/Stratix10SoCGSRD
 Note2:
 If there is any device running on FPGA side, please stop it firstly.
 
+Note3:
+For Agilex platform, we need disable fcs in u-boot to avoid fcs secure policy
+block writing images to FPGA Manager:
+	# fdt addr ${fdt_addr};fdt resize;fdt set /soc/firmware/svc/fcs status disabled;
 
 9. Remote System Update
 =======================
@@ -468,10 +472,10 @@ way is to create them via below commands.
 	  done
 
 The following files will be created:
-~/rsu_example/ image_files/ghrd_hps.0.rpd
-~/rsu_example/ image_files/ghrd_hps.1.rpd
-~/rsu_example/ image_files/ghrd_hps.2.rpd
-~/rsu_example/ image_files/ghrd_hps.3.rpd
+~/rsu_example/image_files/ghrd_hps.0.rpd
+~/rsu_example/image_files/ghrd_hps.1.rpd
+~/rsu_example/image_files/ghrd_hps.2.rpd
+~/rsu_example/image_files/ghrd_hps.3.rpd
 
 9.8 Building ZLIB
 -----------------
@@ -1208,7 +1212,7 @@ Run below command to start/stop blinking FPGA LEDs.
 	# echo timer > /sys/class/leds/fpga_led2/trigger
 	# echo none > /sys/class/leds/fpga_led2/trigger
 
-Note: When run FPGA GPIO feature, please use socfpga_stratix10_socdk_ghrd.dtb file.
+Note: When run FPGA GPIO feature, please use socfpga_agilex_socdk_ghrd.dtb file.
 
 
 15. Bootloader
