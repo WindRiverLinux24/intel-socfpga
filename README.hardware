@@ -92,6 +92,12 @@ The following features are not supported and not validated:
 2) CPU hotplug feature doesn't support for stopping CPU0, only CPU1~3 are able to be
    disabled and enabled.
 
+3) When attempting to read from or write to a USB device operating in 'High speed
+   (480-Mbps)' mode, input/output errors may occur. As a workaround, adjusting the
+   maximum speed to 'Full speed (12-Mbps)' in U-Boot can help alleviate this issue.
+
+   # fdt set /soc/usb@ffb00000 maximum-speed full-speed
+
 4. BSP Notes
 ============
 
