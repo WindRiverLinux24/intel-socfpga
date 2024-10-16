@@ -1530,7 +1530,7 @@ Build image directly by running:
 
 After that, you will find fcs wic image in below path, write it to mmc card directly with "dd" command.
 
-	tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-agilex-socdk-vab-mmc.wic
+	tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.rootfs-agilex-socdk-vab-mmc.wic
 
 You can also use you own keys to sign images through "FCS_KEY_DIR" in conf/local.conf,
 it specifies where the key files are stored. If "FCS_KEY_DIR" is not specified, you will find the default key

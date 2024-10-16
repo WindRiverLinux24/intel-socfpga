@@ -22,6 +22,7 @@ This BSP supports the following boards:
 =================
 
   - 2024/10 (LINUXPG-2370) Linux-10.24 RCPL02: Add Intel Stratix 10 SOCFPGA board support
+  - 2024/11 (LINUXPG-2414) Linux-10.24 RCPL03: Add Intel Agilex7 F-Series board support
 
 3. BSP Features
 ===============
@@ -150,15 +151,15 @@ Preloader
 
 	Board:	               Intel SOCFPGA Agilex Board
 	BootLoader:            U-Boot SPL
-	BootLoader Version:    U-Boot SPL 2022.10 (Mar 20 2023 - 03:03:15 +0000)
+	BootLoader Version:    U-Boot SPL 2024.01 (Jun 25 2024 - 09:28:56 +0000)
 
 Arm Trust Firmware
 ------------------
 
 	Board:	               Intel SOCFPGA Agilex Board
 	BootLoader: 	       BL31
-	BootLoader Version:    v2.8.0(release):rel_socfpga_v2.8.0_23.03.03_pr
-			       Built : 13:29:30, Apr  4 2023
+	BootLoader Version:    v2.10.1  (release):4837356693ed
+			       Built : 08:56:04, Jun 25 2024
 
 Bootloader
 ----------
@@ -167,7 +168,7 @@ Bootloader
 	Board:	               Intel SOCFPGA Agilex Board
 	Board Revision:        Rev A devkit
 	BootLoader:            U-Boot
-	BootLoader Version:    U-Boot 2022.04 (Nov 10 2022 - 03:07:42 +0000)socfpga_agilex
+	BootLoader Version:    U-Boot 2024.01 (Jun 25 2024 - 09:28:56 +0000)socfpga_agilex
 
 4.2.2 Known hardware Issues
 ---------------------------
