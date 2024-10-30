@@ -915,7 +915,8 @@ Add crashkernel=256M@256M to the kernel cmdline
    echo c > /proc/sysrq-trigger
 
 Note:
-Before booting the second kernel, add "maxcpus=1" to the boot parameter.
+1) Before booting the second kernel, add "maxcpus=1" to the boot parameter.
+2) When FCS is enabled, more memory is needed, a recommended crashkernel size is "1024M".
 
 For more detailed info about kdump, refer to Documentation/kdump/kdump.txt
 in the kernel source tree.
