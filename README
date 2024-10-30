@@ -74,7 +74,7 @@ along with patch descriptions, use git to see what changed on the default
 kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
 
   # cd tmp-glibc/work-shared/<bsp_name>/kernel-source
-  # git whatchanged v6.1/standard/base..v6.1/standard/intel-sdk-6.1/intel-socfpga
+  # git whatchanged v6.6/standard/base..v6.6/standard/intel-sdk-6.6/intel-socfpga
 
 
 4. Boot Instructions
@@ -234,10 +234,10 @@ After building the project, you will have a WIC image under the directory
 tmp-glibc/deploy/images/<bsp name>/, for example:
 
 For Stratix10 platform
-tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-stratix10.wic
+tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.rootfs-stratix10-socdk-mmc.wic
 
 For Agilex platform
-tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-agilex.wic
+tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.rootfs-agilex-socdk-mmc.wic
 
 You can then write the output image to an SD card.
 
@@ -247,10 +247,10 @@ You can then write the output image to an SD card.
 To burn u-boot and WIC images to an SD card, you need to execute below command:
 
 For Stratix10 platform
-# dd if=wrlinux-image-std-intel-socfpga-64-stratix10.wic of=/dev/your_sd_dev
+# dd if=wrlinux-image-std-intel-socfpga-64.rootfs-stratix10-socdk-mmc.wic of=/dev/your_sd_dev
 
 For Agilex platform
-# dd if=wrlinux-image-std-intel-socfpga-64-agilex.wic of=/dev/your_sd_dev
+# dd if=wrlinux-image-std-intel-socfpga-64.rootfs-agilex-socdk-mmc.wic of=/dev/your_sd_dev
 
 6.2 Boot up wic image
 ---------------------
@@ -493,9 +493,9 @@ The bitstream containing the FPGA image and the FSBL is stored in flash,
 but the SSBL(u-boot.itb), kernel image, dtb and rootfs will be stored in SD card.
 The SD card images(wic files) are also built when building intel-socfpga BSP project.
 For Stratix10 platform
-<project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-stratix10.wic
+<project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.rootfs-stratix10-socdk-mmc.wic
 For Agilex platform
-<project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64-agilex.wic
+<project dir>/build/tmp-glibc/deploy/images/intel-socfpga-64/wrlinux-image-std-intel-socfpga-64.rootfs-agilex-socdk-mmc.wic
 
 Note:
 The Remote Update Production Images(ghrd_hps.0/1/2/3.rpd) need to be copied into rootfs manually.
@@ -551,8 +551,8 @@ For Agilex platform
 
 9.12.1 Run RSU feature from u-boot
 ----------------------------------
-1) Write the SD card image wrlinux-image-std-intel-socfpga-64-<stratix10/agilex>.wic to a SD card with dd command,
-   and then install the SD card onto the Stratix10/Agilex HPS daughtercard.
+1) Write the SD card image wrlinux-image-std-intel-socfpga-64.rootfs-<stratix10/agilex>-socdk-mmc.wic
+   to a SD card with dd command, and then install the SD card onto the Stratix10/Agilex HPS daughtercard.
    Customer also can load kernel, dtb and rootfs from other media(for example, network)
 
 For Stratix10 platform
@@ -899,7 +899,7 @@ Check whether ECC feature take effect, please follow below steps.
 
 You need to add feature/kexec,feature/kdump templates support as follow:
 
-	./wrlinux-x/setup.sh --machines intel-socfpga --templates feature/kexec,feature/kdump
+	./wrlinux-x/setup.sh --machines intel-socfpga-64 --templates feature/kexec,feature/kdump
 
 11.1 kexec
 ---------
@@ -953,7 +953,7 @@ Build Image
 	# bitbake wrlinux-image-std
 
 Get FPGA image with PCIe feature from below below:
-https://releases.rocketboards.org/release/2021.04/pcie/s10_pcie_gen3x8/
+https://releases.rocketboards.org/2021.04/pcie/s10_pcie/
 
 Generate sof file and program it into board with Quartus programmer tool,
 and then run below commands to boot up system.
@@ -1060,16 +1060,13 @@ and then run below commands to boot up system.
 				  ip=<target IP>::<gateway>:<netmask>::eth0:off
 	SOCFPGA_AGILEX # booti 0x2000000 - 0x8000000
 
-After system boots up, execute the following commands to verify PCIe interface:
+After system boots up, execute the following commands to verify sgmii interface:
 
 	# ifconfig -a
 	# dhcpcd eth1
 	# ping <ip address> -I eth1 -c 5
 
-Note1: When run FPGA SGMII ethernet feature, please use socfpga_agilex_socdk_sgmii.dtb file.
-Note2: The FPGA SGMII ethernet feature is only supported when Agilex platform boots up SD daughter card.
-       It is not supported when Agilex platform boots up NAND daughter card, because the FPGA image for
-       NAND daughter card doesn't SGMII ethernet design.
+Note1: When run FPGA SGMII ethernet feature, please use socfpga_agilex_socdk(_nand)_sgmii.dtb file.
 
 14. FPGA GPIO
 =============
@@ -1575,7 +1572,39 @@ If all things works well, you can flash .jic file to board for long term use:
 
 	quartus_pgm -c 1 -m jtag -o "pvi;signed_flash.jic"
 
-18.3 Notes
+18.3 FCS Verification
+---------------------
+
+After boot into system, run below command to have a test:
+
+	# fcs_client -G prov-data.txt -p
+	ioctl return status=0
+	W0:Provision Status Code: 0x0
+	W1:Key Cancellation Status: 0x1F
+	W2:Co-Sign Status:          0
+	W2:RootHash0 Cancel Status: 0
+	W2:RootHash1 Cancel Status: 2
+	W2:RootHash2 Cancel Status: 4
+	W2:Number of Hashes:        1
+	W2:Type of Hash:            secp384r1
+	number of hashes is 1
+	0000: 45 4a 56 5e b3 0f a8 be
+	0008: 2b ab de c7 dc db e4 20
+	0010: 95 ba 17 56 1b 6e 6d eb
+	0018: ba 79 41 54 d5 2f f0 10
+	0020: a4 82 89 a5 b4 e0 2c 45
+	0028: c9 87 b8 c5 b6 5e 7e 75
+	KCS[0]: 0x0
+	C1:Big Counter Base:   0x0
+	C1:Big Counter Value:  0x0
+	C2:SVN Counter Value3: 0x0
+	C2:SVN Counter Value2: 0x0
+	C2:SVN Counter Value1: 0x0
+	C2:SVN Counter Value0: 0x0
+	Service Root Key #1 Fuse Status: 0x1
+	Service Root Key #0 Fuse Status: 0x1
+
+18.4 Notes
 ----------
 
 1) If key files are changed, FPGA images, uboot, kernel and kernel dtb are needed to re-sign and re-create,
