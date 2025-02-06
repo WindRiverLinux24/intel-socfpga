@@ -5,7 +5,7 @@ DEPENDS:append:intel-socfpga-64 = " arm-trusted-firmware bash"
 DEPENDS:append:intel-socfpga-64 = " s10-u-boot-scr"
 DEPENDS:append:intel-socfpga-64 = " ${@bb.utils.contains('MACHINE_FEATURES', 'fcs', ' fcs-prepare fcs-prepare-native python3-dtc python3-dtc-native', '', d)}"
 
-SRCREV:intel-socfpga-64 = "157b759210e2024649081657b56adfc41fb56f34"
+SRCREV:intel-socfpga-64 = "135e53726d3dfbe55b4d61c2bf3fdf32cdc372e5"
 SRC_URI:append:intel-socfpga-64 = " \
 	file://0001-driver-watchdog-enable-wdt-command-by-default.patch \
 	file://0001-Update-settings-for-ostree.patch \
