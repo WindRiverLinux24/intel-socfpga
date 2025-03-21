@@ -22,6 +22,10 @@ SRC_URI:append:intel-socfpga-64 = " \
 	file://0001-include-configs-specify-kernel.itb-as-bootfile-for-m.patch \
 "
 
+FILESEXTRAPATHS:prepend := "${COREBASE}/meta/recipes-bsp/u-boot/files:"
+SRC_URI += "file://CVE-2024-57254.patch \
+"
+
 inherit deploy
 
 do_compile[deptask] = "do_deploy"
