@@ -1,6 +1,6 @@
 DESCRIPTION = "FCS certificate client is a userspace application for interacting \
                with the SDM VAB and SDOS functionality"
-HOMEPAGE = "https://github.com/altera-opensource/fcs_apps.git"
+HOMEPAGE = "https://github.com/altera-fpga/fcs_apps.git"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
@@ -14,10 +14,10 @@ PV = "0.1+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 BRANCH = "fcs_client"
-SRC_URI = "git://github.com/altera-opensource/fcs_apps.git;protocol=http;branch=${BRANCH} \
+SRC_URI = "git://github.com/altera-fpga/fcs_apps.git;protocol=http;branch=${BRANCH} \
 	   file://0001-fcs-client-building-in-Yocto-environment.patch \
 "
-SRCREV ?= "3aaadb298ad32bb60603c13bec53b005aae1311b"
+SRCREV ?= "6c7098bf5a973d7045831b607497d8d6ae82ba59"
 
 EXTRA_OEMAKE = 'CC="${CC}"'
 COMPATIBLE_MACHINE = "intel-socfpga-64"
